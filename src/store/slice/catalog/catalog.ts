@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TProduct } from '../../types/product';
-import { RequestStatus } from '../../const';
-import { fetchCamerasProduct } from './api-action';
+import { TProduct } from '../../../types/product';
+import { RequestStatus } from '../../../const';
+import { fetchCamerasProduct } from '../../api-action';
 
 
 type TInitialState = {

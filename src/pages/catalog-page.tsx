@@ -3,7 +3,7 @@ import CatalogProducts from '../components/catalog-products';
 import Container from '../components/container';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { TProduct } from '../types/product';
-import { fetchCamerasProduct } from '../store/slice/api-action';
+import { fetchCamerasProduct } from '../store/api-action';
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch();

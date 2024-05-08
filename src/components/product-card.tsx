@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { TProduct } from '../types/product';
+import { AppRoute } from '../const';
 
 type TProductCard = {
   camera: TProduct;
@@ -45,8 +47,9 @@ export default function ProductCard({ camera }: TProductCard) {
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить
         </button>
-        <a className="btn btn--transparent" href="#">Подробнее
-        </a>
+        <Link className="btn btn--transparent" to={`${AppRoute.CAMERA}/${camera.id}`}>
+          Подробнее
+        </Link>
       </div>
     </div>
   );
