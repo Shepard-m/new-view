@@ -1,7 +1,18 @@
+import { useEffect } from 'react';
 import CatalogProducts from '../components/catalog-products';
 import Container from '../components/container';
+import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
+import { TProduct } from '../types/product';
+import { fetchCamerasProduct } from '../store/slice/api-action';
 
 export default function CatalogPage() {
+  const dispatch = useAppDispatch();
+  const cameras = useAppSelector((state) => state.catalog.cameras);
+
+  useEffect(() => {
+    dispatch(fetchCamerasProduct());
+  }, []);
+
   return (
     <Container>
       <div>
@@ -145,7 +156,7 @@ export default function CatalogPage() {
                 </div>
               </form>
             </div>*/}
-                  <CatalogProducts />
+                  <CatalogProducts cameras={cameras as TProduct[]} />
                   {/*<div class="pagination">
               <ul class="pagination__list">
                 <li class="pagination__item"><a class="pagination__link pagination__link&#45;&#45;active" href="1">1</a>

@@ -1,9 +1,16 @@
-export default function ProductCard() {
+import { TProduct } from '../types/product';
+
+type TProductCard = {
+  camera: TProduct;
+}
+
+export default function ProductCard({ camera }: TProductCard) {
   return (
     <div className="product-card">
       <div className="product-card__img">
         <picture>
-          <source type="image/webp" srcSet="img/content/img9.webp, img/content/img9@2x.webp 2x" /><img src="img/content/img9.jpg" srcSet="img/content/img9@2x.jpg 2x" width={280} height={240} alt="Фотоаппарат FastShot MR-5" />
+          <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />
+          <img src={`${camera.previewImg}`} srcSet={`${camera.previewImg2x} 2x`} width={280} height={240} alt={camera.name} />
         </picture>
       </div>
       <div className="product-card__info">
@@ -23,11 +30,16 @@ export default function ProductCard() {
           <svg width={17} height={16} aria-hidden="true">
             <use xlinkHref="#icon-star" />
           </svg>
-          <p className="visually-hidden">Рейтинг: 4</p>
-          <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>12</p>
+          <p className="visually-hidden">Рейтинг: {camera.rating}</p>
+          <p className="rate__count">
+            <span className="visually-hidden">Всего оценок:</span>
+            {camera.reviewCount}
+          </p>
         </div>
-        <p className="product-card__title">Фотоаппарат FastShot MR-5</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>18 970 ₽
+        <p className="product-card__title">{camera.name}</p>
+        <p className="product-card__price">
+          <span className="visually-hidden">Цена:</span>
+          18 970 ₽
         </p>
       </div>
       <div className="product-card__buttons">

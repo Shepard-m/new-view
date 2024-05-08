@@ -1,9 +1,17 @@
+import { TProduct } from '../types/product';
 import ProductCard from './product-card';
 
-export default function CatalogProducts() {
+type TCatalogProducts = {
+  cameras: TProduct[];
+}
+
+export default function CatalogProducts({ cameras }: TCatalogProducts) {
+  if (cameras === null) {
+    return '';
+  }
   return (
     <div className="cards catalog__cards">
-      <ProductCard />
+      {cameras.map((camera) => <ProductCard key={camera.id} camera={camera} />)}
     </div>
   );
 }
