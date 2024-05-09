@@ -14,3 +14,6 @@ export const RequestStatus = {
   FAILED: 'failed',
   NONE: 'none'
 };
+
+export const COUNT_STAR = 5;
+export const STEP_ADD_REVIEWS = 3;

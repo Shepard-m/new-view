@@ -1,34 +1,20 @@
 import { TReview } from '../types/review';
+import { converterData } from '../utils/utils';
+import ListStars from './list-stars';
 
 type TReviewUser = {
   review: TReview;
 }
 
 export default function Review({ review }: TReviewUser) {
+  const data = converterData(review.createAt);
   return (
     <li className="review-card">
       <div className="review-card__head">
         <p className="title title--h4">{review.userName}</p>
-        <time className="review-card__data" dateTime="2022-04-13">13 апреля</time>
+        <time className="review-card__data" dateTime="2022-04-13">{data}</time>
       </div>
-      <div className="rate review-card__rate">
-        <svg width={17} height={16} aria-hidden="true">
-          <use xlinkHref="#icon-full-star" />
-        </svg>
-        <svg width={17} height={16} aria-hidden="true">
-          <use xlinkHref="#icon-full-star" />
-        </svg>
-        <svg width={17} height={16} aria-hidden="true">
-          <use xlinkHref="#icon-full-star" />
-        </svg>
-        <svg width={17} height={16} aria-hidden="true">
-          <use xlinkHref="#icon-full-star" />
-        </svg>
-        <svg width={17} height={16} aria-hidden="true">
-          <use xlinkHref="#icon-full-star" />
-        </svg>
-        <p className="visually-hidden">Оценка: {review.rating}</p>
-      </div>
+      <ListStars countStar={review.rating} />
       <ul className="review-card__list">
         <li className="item-list"><span className="item-list__title">Достоинства:</span>
           <p className="item-list__text">{review.advantage}</p>
