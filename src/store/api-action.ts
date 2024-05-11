@@ -3,6 +3,7 @@ import { AxiosInstance } from 'axios';
 import { TProduct } from '../types/product';
 import { ApiRoute } from '../const';
 import { TReview } from '../types/review';
+import { TPromo } from '../types/promo';
 
 export const fetchCamerasProduct = createAsyncThunk<TProduct[], undefined, { extra: AxiosInstance }>(
   'data/fetchCamerasProduct',
@@ -25,6 +26,14 @@ export const fetchGetReviews = createAsyncThunk<TReview[], string, { extra: Axio
   'fetchGetReviews',
   async (id, { extra: api }) => {
     const { data } = await api.get<TReview[]>(`${ApiRoute.CAMERAS}/${id}${ApiRoute.REVIEWS}`);
+
+    return data;
+  }
+);
+export const fetchGetPromos = createAsyncThunk<TPromo[], undefined, { extra: AxiosInstance }>(
+  'fetchGetPromo',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<TPromo[]>(ApiRoute.PROMO);
 
     return data;
   }

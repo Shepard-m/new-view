@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import CatalogProducts from '../components/catalog-products';
 import Container from '../components/container';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
-import { TProduct } from '../types/product';
 import { fetchCamerasProduct } from '../store/api-action';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../const';
+import PromosCameras from '../components/promos-cameras';
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
@@ -16,22 +18,18 @@ export default function CatalogPage() {
   return (
     <Container>
       <div>
-        <div className="banner">
-          <picture>
-            <source type="image/webp" srcSet="img/content/banner-bg.webp, img/content/banner-bg@2x.webp 2x" /><img src="img/content/banner-bg.jpg" srcSet="img/content/banner-bg@2x.jpg 2x" width={1280} height={280} alt="баннер" />
-          </picture>
-          <p className="banner__info"><span className="banner__message">Новинка!</span><span className="title title--h1">Cannonball&nbsp;Pro&nbsp;MX&nbsp;8i</span><span className="banner__text">Профессиональная камера от&nbsp;известного производителя</span><a className="btn" href="#">Подробнее</a></p>
-        </div>
+        <PromosCameras />
         <div className="page-content">
           <div className="breadcrumbs">
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link" href="index.html">Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.CATALOG}>
+                    Главная
                     <svg width={5} height={8} aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini" />
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span>
                 </li>
@@ -156,7 +154,7 @@ export default function CatalogPage() {
                 </div>
               </form>
             </div>*/}
-                  <CatalogProducts cameras={cameras as TProduct[]} />
+                  <CatalogProducts cameras={cameras} />
                   {/*<div class="pagination">
               <ul class="pagination__list">
                 <li class="pagination__item"><a class="pagination__link pagination__link&#45;&#45;active" href="1">1</a>

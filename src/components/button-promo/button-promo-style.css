@@ -1,0 +1,17 @@
+.banner__button-promo {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  list-style: none;
+}
+
+.banner__button-promo:not(:last-child){
+  margin-right: 14px;
+}
+
+.banner__button-promo > img {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

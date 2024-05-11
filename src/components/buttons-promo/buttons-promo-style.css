@@ -1,0 +1,7 @@
+.banner__buttons-promo {
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
+  padding-right: 40px;
+  padding-bottom: 22px;
+}

@@ -4,10 +4,11 @@ import ReviewsList from '../components/reviews-list';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { cameraSelectors } from '../store/slice/camera/cameraSelectors';
 import { fetchGetCamera, fetchGetReviews } from '../store/api-action';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { reviewsSelectors } from '../store/slice/reviews/revies-selectors';
 import { Helmet } from 'react-helmet-async';
 import ProductInfo from '../components/product-info';
+import { AppRoute } from '../const';
 
 export default function CameraPage() {
   const dispatch = useAppDispatch();
@@ -36,20 +37,20 @@ export default function CameraPage() {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link" href="index.html">
+                  <Link className="breadcrumbs__link" to={AppRoute.CATALOG}>
                     Главная
                     <svg width={5} height={8} aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini" />
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link" href="catalog.html">
+                  <Link className="breadcrumbs__link" to={AppRoute.CATALOG}>
                     Каталог
                     <svg width={5} height={8} aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini" />
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">{camera?.name}</span>
                 </li>
@@ -98,138 +99,139 @@ export default function CameraPage() {
               </div>
             </section>
           </div>
-          {/*<div class="page-content__section">
-      <section class="product-similar">
-        <div class="container">
-          <h2 class="title title&#45;&#45;h3">Похожие товары</h2>
-          <div class="product-similar__slider">
-            <div class="product-similar__slider-list">
-              <div class="product-card is-active">
-                <div class="product-card__img">
-                  <picture>
-                    <source type="image/webp" srcset="img/content/img9.webp, img/content/img9@2x.webp 2x"><img src="img/content/img9.jpg" srcset="img/content/img9@2x.jpg 2x" width="280" height="240" alt="Фотоаппарат FastShot MR-5">
-                  </picture>
-                </div>
-                <div class="product-card__info">
-                  <div class="rate product-card__rate">
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-star"></use>
-                    </svg>
-                    <p class="visually-hidden">Рейтинг: 4</p>
-                    <p class="rate__count"><span class="visually-hidden">Всего оценок:</span>12</p>
+          <div className="page-content__section">
+            <section className="product-similar">
+              <div className="container">
+                <h2 className="title title--h3">Похожие товары</h2>
+                <div className="product-similar__slider">
+                  <div className="product-similar__slider-list">
+                    <div className="product-card is-active">
+                      <div className="product-card__img">
+                        <picture>
+                          <source type="image/webp" srcSet="img/content/img9.webp, img/content/img9@2x.webp 2x" /><img src="img/content/img9.jpg" srcSet="img/content/img9@2x.jpg 2x" width={280} height={240} alt="Фотоаппарат FastShot MR-5" />
+                        </picture>
+                      </div>
+                      <div className="product-card__info">
+                        <div className="rate product-card__rate">
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-star" />
+                          </svg>
+                          <p className="visually-hidden">Рейтинг: 4</p>
+                          <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>12</p>
+                        </div>
+                        <p className="product-card__title">Фотоаппарат FastShot MR-5</p>
+                        <p className="product-card__price"><span className="visually-hidden">Цена:</span>18 970 ₽
+                        </p>
+                      </div>
+                      <div className="product-card__buttons">
+                        <button className="btn btn--purple product-card__btn" type="button">Купить
+                        </button>
+                        <a className="btn btn--transparent" href="#">Подробнее
+                        </a>
+                      </div>
+                    </div>
+                    <div className="product-card is-active">
+                      <div className="product-card__img">
+                        <picture>
+                          <source type="image/webp" srcSet="img/content/img1.webp, img/content/img1@2x.webp 2x" /><img src="img/content/img1.jpg" srcSet="img/content/img1@2x.jpg 2x" width={280} height={240} alt="Ретрокамера «Das Auge IV»" />
+                        </picture>
+                      </div>
+                      <div className="product-card__info">
+                        <div className="rate product-card__rate">
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-star" />
+                          </svg>
+                          <p className="visually-hidden">Рейтинг: 3</p>
+                          <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>23</p>
+                        </div>
+                        <p className="product-card__title">Ретрокамера «Das Auge IV»</p>
+                        <p className="product-card__price"><span className="visually-hidden">Цена:</span>73 450 ₽
+                        </p>
+                      </div>
+                      <div className="product-card__buttons">
+                        <button className="btn btn--purple product-card__btn" type="button">Купить
+                        </button>
+                        <a className="btn btn--transparent" href="#">Подробнее
+                        </a>
+                      </div>
+                    </div>
+                    <div className="product-card is-active">
+                      <div className="product-card__img">
+                        <picture>
+                          <source type="image/webp" srcSet="img/content/img5.webp, img/content/img5@2x.webp 2x" /><img src="img/content/img5.jpg" srcSet="img/content/img5@2x.jpg 2x" width={280} height={240} alt="Фотоаппарат Instaprinter P2" />
+                        </picture>
+                      </div>
+                      <div className="product-card__info">
+                        <div className="rate product-card__rate">
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <svg width={17} height={16} aria-hidden="true">
+                            <use xlinkHref="#icon-full-star" />
+                          </svg>
+                          <p className="visually-hidden">Рейтинг: 5</p>
+                          <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>849</p>
+                        </div>
+                        <p className="product-card__title">Фотоаппарат Instaprinter P2</p>
+                        <p className="product-card__price"><span className="visually-hidden">Цена:</span>8 430 ₽
+                        </p>
+                      </div>
+                      <div className="product-card__buttons">
+                        <button className="btn btn--purple product-card__btn" type="button">Купить
+                        </button>
+                        <a className="btn btn--transparent" href="#">Подробнее
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                  <p class="product-card__title">Фотоаппарат FastShot MR-5</p>
-                  <p class="product-card__price"><span class="visually-hidden">Цена:</span>18 970 ₽
-                  </p>
-                </div>
-                <div class="product-card__buttons">
-                  <button class="btn btn&#45;&#45;purple product-card__btn" type="button">Купить
+                  <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled>
+                    <svg width={7} height={12} aria-hidden="true">
+                      <use xlinkHref="#icon-arrow" />
+                    </svg>
                   </button>
-                  <a class="btn btn&#45;&#45;transparent" href="#">Подробнее
-                  </a>
+                  <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд">
+                    <svg width={7} height={12} aria-hidden="true">
+                      <use xlinkHref="#icon-arrow" />
+                    </svg>
+                  </button>
                 </div>
               </div>
-              <div class="product-card is-active">
-                <div class="product-card__img">
-                  <picture>
-                    <source type="image/webp" srcset="img/content/img1.webp, img/content/img1@2x.webp 2x"><img src="img/content/img1.jpg" srcset="img/content/img1@2x.jpg 2x" width="280" height="240" alt="Ретрокамера «Das Auge IV»">
-                  </picture>
-                </div>
-                <div class="product-card__info">
-                  <div class="rate product-card__rate">
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-star"></use>
-                    </svg>
-                    <p class="visually-hidden">Рейтинг: 3</p>
-                    <p class="rate__count"><span class="visually-hidden">Всего оценок:</span>23</p>
-                  </div>
-                  <p class="product-card__title">Ретрокамера «Das Auge IV»</p>
-                  <p class="product-card__price"><span class="visually-hidden">Цена:</span>73 450 ₽
-                  </p>
-                </div>
-                <div class="product-card__buttons">
-                  <button class="btn btn&#45;&#45;purple product-card__btn" type="button">Купить
-                  </button>
-                  <a class="btn btn&#45;&#45;transparent" href="#">Подробнее
-                  </a>
-                </div>
-              </div>
-              <div class="product-card is-active">
-                <div class="product-card__img">
-                  <picture>
-                    <source type="image/webp" srcset="img/content/img5.webp, img/content/img5@2x.webp 2x"><img src="img/content/img5.jpg" srcset="img/content/img5@2x.jpg 2x" width="280" height="240" alt="Фотоаппарат Instaprinter P2">
-                  </picture>
-                </div>
-                <div class="product-card__info">
-                  <div class="rate product-card__rate">
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <svg width="17" height="16" aria-hidden="true">
-                      <use xlink:href="#icon-full-star"></use>
-                    </svg>
-                    <p class="visually-hidden">Рейтинг: 5</p>
-                    <p class="rate__count"><span class="visually-hidden">Всего оценок:</span>849</p>
-                  </div>
-                  <p class="product-card__title">Фотоаппарат Instaprinter P2</p>
-                  <p class="product-card__price"><span class="visually-hidden">Цена:</span>8 430 ₽
-                  </p>
-                </div>
-                <div class="product-card__buttons">
-                  <button class="btn btn&#45;&#45;purple product-card__btn" type="button">Купить
-                  </button>
-                  <a class="btn btn&#45;&#45;transparent" href="#">Подробнее
-                  </a>
-                </div>
-              </div>
-            </div>
-            <button class="slider-controls slider-controls&#45;&#45;prev" type="button" aria-label="Предыдущий слайд" disabled>
-              <svg width="7" height="12" aria-hidden="true">
-                <use xlink:href="#icon-arrow"></use>
-              </svg>
-            </button>
-            <button class="slider-controls slider-controls&#45;&#45;next" type="button" aria-label="Следующий слайд">
-              <svg width="7" height="12" aria-hidden="true">
-                <use xlink:href="#icon-arrow"></use>
-              </svg>
-            </button>
+            </section>
           </div>
-        </div>
-      </section>
-    </div>*/}
+
           <div className="page-content__section">
             <section className="review-block">
               <div className="container">

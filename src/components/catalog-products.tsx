@@ -2,7 +2,7 @@ import { TProduct } from '../types/product';
 import ProductCard from './product-card';
 
 type TCatalogProducts = {
-  cameras: TProduct[];
+  cameras: TProduct[] | null;
 }
 
 export default function CatalogProducts({ cameras }: TCatalogProducts) {
