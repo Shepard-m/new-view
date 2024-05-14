@@ -22,6 +22,14 @@ export const fetchGetCamera = createAsyncThunk<TProduct, string, { extra: AxiosI
     return data;
   }
 );
+export const fetchGetSimilar = createAsyncThunk<TProduct[], string, { extra: AxiosInstance }>(
+  'fetchGetSimilar',
+  async (id, { extra: api }) => {
+    const { data } = await api.get<TProduct[]>(`${ApiRoute.CAMERAS}/${id}/${ApiRoute.SIMILAR}`);
+
+    return data;
+  }
+);
 export const fetchGetReviews = createAsyncThunk<TReview[], string, { extra: AxiosInstance }>(
   'fetchGetReviews',
   async (id, { extra: api }) => {

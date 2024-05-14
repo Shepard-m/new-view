@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { fetchGetPromos } from '../store/api-action';
 import { selectedPromoSelectors, promosSelectors } from '../store/slice/promo/promo-selectors';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../const';
 import ButtonsPromo from './buttons-promo/buttons-promo';
-import { TPromo } from '../types/promo';
+import { promosActions } from '../store/slice/promo/promo';
 
 export default function PromosCameras() {
   const dispatch = useAppDispatch();
   const selectors = useAppSelector;
+
   useEffect(() => {
     dispatch(fetchGetPromos());
   }, []);
@@ -20,6 +21,11 @@ export default function PromosCameras() {
   if (promo === undefined) {
     return;
   }
+
+  if (promos === null) {
+    return;
+  }
+
 
   return (
     <div className="banner">
@@ -41,7 +47,7 @@ export default function PromosCameras() {
           Подробнее
         </Link>
       </p>
-      <ButtonsPromo promo={promo} promos={promos as TPromo[]} />
+      <ButtonsPromo promo={promo} promos={promos} />
     </div>
   );
 }

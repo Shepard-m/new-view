@@ -1,3 +1,4 @@
+import { OptionsStars } from '../const';
 import { TReview } from '../types/review';
 import { converterData } from '../utils/utils';
 import ListStars from './list-stars';
@@ -14,7 +15,7 @@ export default function Review({ review }: TReviewUser) {
         <p className="title title--h4">{review.userName}</p>
         <time className="review-card__data" dateTime="2022-04-13">{data}</time>
       </div>
-      <ListStars countStar={review.rating} />
+      <ListStars countStar={review.rating} optionsStars={OptionsStars.REVIEWS} countComments={0} />
       <ul className="review-card__list">
         <li className="item-list"><span className="item-list__title">Достоинства:</span>
           <p className="item-list__text">{review.advantage}</p>

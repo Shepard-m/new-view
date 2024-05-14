@@ -1,6 +1,7 @@
 import { SyntheticEvent } from 'react';
 import './button-promo-style.css';
 
+
 type TButtonPromo = {
   idPromo: number;
   selectedPromoId: number;
@@ -11,6 +12,8 @@ export default function ButtonPromo({ idPromo, selectedPromoId, handleSelectProm
   function onSelectPromoClick(evt: SyntheticEvent<HTMLImageElement>) {
     handleSelectPromoClick(evt.currentTarget.dataset.id as string);
   }
+
+
   return (
     <li className="banner__button-promo">
       {selectedPromoId === idPromo

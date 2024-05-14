@@ -1,14 +1,15 @@
-import { COUNT_STAR } from '../const';
+import { COUNT_STAR, OptionsStars } from '../const';
 
 type TStars = {
   countStar: number;
+  optionsStars: typeof OptionsStars.PRODUCT;
+  countComments: number;
 }
-
-export default function ListStars({ countStar }: TStars) {
+export default function ListStars({ countStar, optionsStars, countComments }: TStars) {
   const listStars = [];
   const defaultListStars = [];
 
-  for (let i = 0; i <= countStar; i++) {
+  for (let i = 0; i < countStar; i++) {
     listStars.push(
       <svg key={i} width={17} height={16} aria-hidden="true">
         <use xlinkHref="#icon-full-star" />
@@ -26,12 +27,12 @@ export default function ListStars({ countStar }: TStars) {
       );
     }
   }
-
-
   return (
-    <div className="rate review-card__rate">
+    <div className={`rate ${optionsStars.class}-card__rate`}>
       {listStars}{defaultListStars}
       <p className="visually-hidden">Оценка: {countStar}</p>
+      {optionsStars.isText
+        && <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{countComments}</p>}
     </div>
   );
 }
