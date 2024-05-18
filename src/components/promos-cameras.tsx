@@ -1,32 +1,23 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { fetchGetPromos } from '../store/api-action';
 import { selectedPromoSelectors, promosSelectors } from '../store/slice/promo/promo-selectors';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../const';
 import ButtonsPromo from './buttons-promo/buttons-promo';
-import { promosActions } from '../store/slice/promo/promo';
 
 export default function PromosCameras() {
   const dispatch = useAppDispatch();
   const selectors = useAppSelector;
   const promo = selectors(selectedPromoSelectors);
   const promos = selectors(promosSelectors);
-  let [step, setStep] = useState(0);
-  // console.log(promos)
 
-  // useEffect(() => {
-
-  // }, [promos]);
 
   useEffect(() => {
     if (promos === null) {
       dispatch(fetchGetPromos());
     }
 
-    // setInterval(selectPromo, 3000);
-
-    // return () => clearInterval(0);
   }, []);
 
   if (promo === undefined) {

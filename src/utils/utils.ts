@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import { TReview } from '../types/review';
+import { TProduct } from '../types/product';
 
 dayjs.locale('ru');
 
@@ -23,4 +24,14 @@ export const formattingPhone = (tel: string) => {
     clearTel += tel[i];
   }
   return clearTel;
+};
+
+export const sortingSimilarList = (similarProducts: TProduct[]) => {
+  const copySimilar = [...similarProducts];
+  if (similarProducts !== null) {
+    copySimilar.sort((a: TProduct, b: TProduct) => a.type.localeCompare(b.type));
+    copySimilar.sort((a: TProduct, b: TProduct) => a.level.localeCompare(b.level));
+    copySimilar.sort((a: TProduct, b: TProduct) => a.category.localeCompare(b.category));
+  }
+  return copySimilar;
 };
