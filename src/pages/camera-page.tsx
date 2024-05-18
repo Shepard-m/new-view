@@ -3,7 +3,7 @@ import Container from '../components/container';
 import ReviewsList from '../components/reviews-list';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { cameraSelectors } from '../store/slice/camera/cameraSelectors';
-import { fetchGetCamera, fetchGetReviews, fetchGetSimilar } from '../store/api-action';
+import { fetchGetCamera, fetchGetPromos, fetchGetReviews, fetchGetSimilar } from '../store/api-action';
 import { Link, useParams } from 'react-router-dom';
 import { reviewsSelectors } from '../store/slice/reviews/revies-selectors';
 import { Helmet } from 'react-helmet-async';
@@ -12,17 +12,28 @@ import { AppRoute, OptionsStars } from '../const';
 import SimilarList from '../components/similar-list';
 import { similarSelectors } from '../store/slice/similar/similarSelectors';
 import ListStars from '../components/list-stars';
+import { promosActions } from '../store/slice/promo/promo';
+import { promosSelectors } from '../store/slice/promo/promo-selectors';
 
 export default function CameraPage() {
   const dispatch = useAppDispatch();
+  const selectors = useAppSelector;
   const { cameraId } = useParams();
+  const promos = selectors(promosSelectors);
 
   useEffect(() => {
-    dispatch(fetchGetCamera(cameraId as string));
-    dispatch(fetchGetReviews(cameraId as string));
-    dispatch(fetchGetSimilar(cameraId as string));
+    Promise.all([
+      dispatch(fetchGetCamera(cameraId as string)),
+      dispatch(fetchGetReviews(cameraId as string)),
+      dispatch(fetchGetSimilar(cameraId as string)),
+      dispatch(fetchGetPromos())
+    ]);
     window.scrollTo(0, 0);
-  }, [cameraId]);
+  }, [cameraId, promos]);
+
+  if (promos !== null) {
+    dispatch(promosActions.selectPromo({ id: `${promos[0].id}` }));
+  }
 
   const camera = useAppSelector(cameraSelectors);
   const reviews = useAppSelector(reviewsSelectors);
@@ -68,8 +79,8 @@ export default function CameraPage() {
               <div className="container">
                 <div className="product__img">
                   <picture>
-                    <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />
-                    <img src={`${camera.previewImg}`} srcSet={`${camera.previewImg2x} 2x`} width={280} height={240} alt={camera.name} />
+                    <source type="image/webp" srcSet={`/${camera.previewImgWebp}, /${camera.previewImgWebp2x} 2x`} />
+                    <img src={`/${camera.previewImg}`} srcSet={`/${camera.previewImg2x} 2x`} width={280} height={240} alt={camera.name} />
                   </picture>
                 </div>
                 <div className="product__content">

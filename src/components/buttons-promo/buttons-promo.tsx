@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks/indexStore';
 import { promosActions } from '../../store/slice/promo/promo';
 import { TPromo } from '../../types/promo';
@@ -11,33 +11,36 @@ type TButtonsPromo = {
   promo: TPromo;
 }
 
-
-
 export default function ButtonsPromo({ promos, promo }: TButtonsPromo) {
   const dispatch = useAppDispatch();
+  const [step, setStep] = useState(0);
 
-  // let [step, setStep] = useState(0);
-  // const selectPromo = setInterval(() => {
-  //   setStep(step++);
+  const selectPromo = () => {
+    if (step === promos?.length - 1) {
+      dispatch(promosActions.selectPromo({ id: `${promos[0].id}` }));
+      setStep(0);
+      return;
+    }
 
-  //   if (step === promos?.length) {
-  //     setStep(0);
-  //     dispatch(promosActions.selectPromo({ id: `${promos[0].id}` }));
-  //     return;
-  //   }
-  //   dispatch(promosActions.selectPromo({ id: `${promos[step].id}` }));
+    setStep(step + 1);
+    dispatch(promosActions.selectPromo({ id: `${promos[step + 1].id}` }));
+  };
+  useEffect(() => {
+    const intervalId = setInterval(selectPromo, 3000);
 
-  // }, 3000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [step]);
 
-  // useCallback(() => selectPromo, []);
-
-  function handleSelectPromoClick(id: string) {
+  function handleSelectPromoClick(id: string, index: string) {
     dispatch(promosActions.selectPromo({ id }));
+    setStep(+index);
   }
 
   return (
     <ul className="banner__buttons-promo">
-      {promos.map((item) => <ButtonPromo key={item.id} idPromo={item.id} selectedPromoId={promo.id} handleSelectPromoClick={handleSelectPromoClick} />)}
+      {promos.map((item, index) => <ButtonPromo key={item.id} idPromo={item.id} selectedPromoId={promo.id} handleSelectPromoClick={handleSelectPromoClick} indexButton={index} />)}
     </ul>
   );
 }

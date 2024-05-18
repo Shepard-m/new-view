@@ -32,12 +32,12 @@ export default function SimilarList({ similar }: TSimilarList) {
             {listSimilar.map((item) => <ProductCard key={item.id} camera={item} isSimilar />)}
           </div>
           <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled={step.start <= 0} onClick={onBackListSimilarClick}>
-            <svg width={7} height={12} aria-hidden="true">
+            <svg width={7} height={12} aria-hidden="true" onClick={onBackListSimilarClick}>
               <use xlinkHref="#icon-arrow" />
             </svg>
           </button>
           <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" disabled={step.end >= similar.length} onClick={onNextListSimilarClick}>
-            <svg width={7} height={12} aria-hidden="true">
+            <svg width={7} height={12} aria-hidden="true" onClick={onNextListSimilarClick}>
               <use xlinkHref="#icon-arrow" />
             </svg>
           </button>

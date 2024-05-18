@@ -12,3 +12,15 @@ export const OPTIONS_TABS = {
   OPTIONS: 'options',
   DESCRIPTION: 'description',
 };
+
+export const formattingPhone = (tel: string) => {
+  let clearTel = '';
+  for (let i = 0; i < tel.length; i++) {
+    if (tel[i] === '-' ?? tel[i] === ' ') {
+      clearTel += '';
+      return;
+    }
+    clearTel += tel[i];
+  }
+  return clearTel;
+};

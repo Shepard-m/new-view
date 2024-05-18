@@ -3239,6 +3239,7 @@ button,
   pointer-events: none;
 }
 
+
 .slider-controls--prev {
   left: 0;
   margin-right: 16px;
@@ -3715,7 +3716,6 @@ button,
   .slider-controls:active {
     color: #7575e2;
     background-color: #a2a2ff;
-    pointer-events: none;
   }
 
   .link:hover,

@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import { TProduct } from '../types/product';
 import { AppRoute, OptionsStars, TextError, VALIDATION_FORM_REG, scrollLock } from '../const';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ListStars from './list-stars';
 import { useForm } from 'react-hook-form';
-const bodyContainer = document.querySelector('body');
 
 type TProductCard = {
   camera: TProduct;
@@ -14,31 +13,42 @@ type TProductCard = {
 export default function ProductCard({ camera, isSimilar }: TProductCard) {
   const [isActiveModal, setIsActiveModal] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<{ phone: string }>();
+  const modalOverlay = useRef(null);
+  useEffect(() => {
+    const bodyContainer = document.querySelector('body');
+    const onCloseModalClick = (evt: MouseEvent) => {
+      if (evt.target === modalOverlay.current) {
+        bodyContainer?.classList.remove(scrollLock);
+        setIsActiveModal(false);
+      }
+    };
+    if (isActiveModal && bodyContainer !== null) {
+      bodyContainer.classList.add(scrollLock);
+      window.addEventListener('click', onCloseModalClick);
+    } else {
+      bodyContainer?.classList.remove(scrollLock);
+      window.removeEventListener('click', onCloseModalClick);
+    }
+  }, [isActiveModal]);
+
   const onCloseModalBuyKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Escape') {
       setIsActiveModal(false);
+      window.removeEventListener('keydown', onCloseModalBuyKeyDown);
     }
-    window.removeEventListener('keydown', onCloseModalBuyKeyDown);
-    bodyContainer?.classList.remove(scrollLock);
   };
 
   function onOpenModalBuyClick() {
     setIsActiveModal(true);
     window.addEventListener('keydown', onCloseModalBuyKeyDown);
-    // bodyContainer?.classList.add(scrollLock);
   }
 
   function onAddBasketSubmit() {
   }
 
-  if (isActiveModal) {
-    bodyContainer?.classList.add(scrollLock);
-  }
-
   function onCloseModalBuyClick() {
     window.removeEventListener('keydown', onCloseModalBuyKeyDown);
     setIsActiveModal(false);
-    bodyContainer?.classList.remove(scrollLock);
   }
 
   return (
@@ -69,16 +79,16 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
       </div>
       {isActiveModal
         &&
-        <div className={`modal ${isActiveModal ? 'is-active' : ''}`}>
+        <div className={`modal ${isActiveModal ? 'is-active' : ''}`} >
           <div className="modal__wrapper">
-            <div className="modal__overlay" />
+            <div className="modal__overlay" ref={modalOverlay} />
             <div className="modal__content">
               <p className="title title--h4">Свяжитесь со мной</p>
               <div className="basket-item basket-item--short">
                 <div className="basket-item__img">
                   <picture>
-                    <source type="image/webp" srcSet={`/${camera.previewImgWebp}, /${camera.previewImgWebp2x} 2x`} />
-                    <img src={`/${camera.previewImg}`} srcSet={`/${camera.previewImg2x} 2x`} alt={`${camera.category} «${camera.name}»`} />
+                    <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />
+                    <img src={`/${camera.previewImg}`} srcSet={`${camera.previewImg2x} 2x`} alt={`${camera.category} «${camera.name}»`} />
                   </picture>
                 </div>
                 <div className="basket-item__description">
@@ -103,7 +113,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                       <use xlinkHref="#icon-snowflake" />
                     </svg>
                   </span>
-                  <input type="tel" placeholder="Введите ваш номер" required {...register('phone', {
+                  <input type="tel" placeholder="Введите ваш номер" tabIndex={0} required {...register('phone', {
                     required: TextError.PHONE,
                     pattern: {
                       value: VALIDATION_FORM_REG,
@@ -117,7 +127,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                 <p className="custom-input__error">Нужно указать номер</p>
               </div>
               <div className="modal__buttons">
-                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={(event) =>
+                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" tabIndex={0} onClick={(event) =>
                   void handleSubmit(onAddBasketSubmit)(event)}
                 >
                   <svg width={24} height={16} aria-hidden="true">
@@ -126,7 +136,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                   Заказать
                 </button>
               </div>
-              <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={onCloseModalBuyClick}>
+              <button className="cross-btn" type="button" aria-label="Закрыть попап" tabIndex={0} onClick={onCloseModalBuyClick}>
                 <svg width={10} height={10} aria-hidden="true">
                   <use xlinkHref="#icon-close" />
                 </svg>

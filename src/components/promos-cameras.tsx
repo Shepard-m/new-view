@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { fetchGetPromos } from '../store/api-action';
 import { selectedPromoSelectors, promosSelectors } from '../store/slice/promo/promo-selectors';
@@ -10,13 +10,24 @@ import { promosActions } from '../store/slice/promo/promo';
 export default function PromosCameras() {
   const dispatch = useAppDispatch();
   const selectors = useAppSelector;
-
-  useEffect(() => {
-    dispatch(fetchGetPromos());
-  }, []);
-
   const promo = selectors(selectedPromoSelectors);
   const promos = selectors(promosSelectors);
+  let [step, setStep] = useState(0);
+  // console.log(promos)
+
+  // useEffect(() => {
+
+  // }, [promos]);
+
+  useEffect(() => {
+    if (promos === null) {
+      dispatch(fetchGetPromos());
+    }
+
+    // setInterval(selectPromo, 3000);
+
+    // return () => clearInterval(0);
+  }, []);
 
   if (promo === undefined) {
     return;
@@ -25,7 +36,6 @@ export default function PromosCameras() {
   if (promos === null) {
     return;
   }
-
 
   return (
     <div className="banner">
