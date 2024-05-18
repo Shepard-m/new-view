@@ -24,31 +24,37 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
     };
     if (isActiveModal && bodyContainer !== null) {
       bodyContainer.classList.add(scrollLock);
-      window.addEventListener('click', onCloseModalClick);
+      document.addEventListener('click', onCloseModalClick);
     } else {
       bodyContainer?.classList.remove(scrollLock);
-      window.removeEventListener('click', onCloseModalClick);
+      document.removeEventListener('click', onCloseModalClick);
     }
   }, [isActiveModal]);
 
   const onCloseModalBuyKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Escape') {
       setIsActiveModal(false);
-      window.removeEventListener('keydown', onCloseModalBuyKeyDown);
+      document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     }
   };
 
   function onOpenModalBuyClick() {
     setIsActiveModal(true);
-    window.addEventListener('keydown', onCloseModalBuyKeyDown);
+    document.addEventListener('keydown', onCloseModalBuyKeyDown);
   }
 
   function onAddBasketSubmit() {
   }
 
   function onCloseModalBuyClick() {
-    window.removeEventListener('keydown', onCloseModalBuyKeyDown);
+    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     setIsActiveModal(false);
+  }
+
+  if (!isActiveModal) {
+
+    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
   }
 
   return (

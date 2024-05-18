@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { TProduct } from '../types/product';
 import ProductCard from './product-card';
 import { STEP_SLIDERS_SIMILAR } from '../const';
+import { sortingSimilarList } from '../utils/utils';
 
 type TSimilarList = {
   similar: TProduct[];
@@ -9,7 +10,8 @@ type TSimilarList = {
 
 export default function SimilarList({ similar }: TSimilarList) {
   const [step, setStep] = useState({ start: 0, end: STEP_SLIDERS_SIMILAR });
-  const listSimilar = similar.slice(step.start, step.end);
+  const sorSimilar = sortingSimilarList(similar);
+  const listSimilar = sorSimilar.slice(step.start, step.end);
 
   useEffect(() => {
     setStep({ start: 0, end: STEP_SLIDERS_SIMILAR });
@@ -21,7 +23,6 @@ export default function SimilarList({ similar }: TSimilarList) {
   function onBackListSimilarClick() {
     setStep({ start: step.start - STEP_SLIDERS_SIMILAR, end: step.end - STEP_SLIDERS_SIMILAR });
   }
-
 
   return (
     <section className="product-similar">

@@ -20,7 +20,9 @@ export default function CameraPage() {
   const selectors = useAppSelector;
   const { cameraId } = useParams();
   const promos = selectors(promosSelectors);
-
+  if (promos !== null) {
+    dispatch(promosActions.selectPromo({ id: `${promos[0].id}` }));
+  }
   useEffect(() => {
     Promise.all([
       dispatch(fetchGetCamera(cameraId as string)),
@@ -29,11 +31,7 @@ export default function CameraPage() {
       dispatch(fetchGetPromos())
     ]);
     window.scrollTo(0, 0);
-  }, [cameraId, promos]);
-
-  if (promos !== null) {
-    dispatch(promosActions.selectPromo({ id: `${promos[0].id}` }));
-  }
+  }, [cameraId]);
 
   const camera = useAppSelector(cameraSelectors);
   const reviews = useAppSelector(reviewsSelectors);
@@ -98,9 +96,10 @@ export default function CameraPage() {
               </div>
             </section>
           </div>
-          <div className="page-content__section">
-            {similar !== null && <SimilarList similar={similar} />}
-          </div>
+          {similar !== null &&
+            <div className="page-content__section">
+              <SimilarList similar={similar} />
+            </div>}
 
           <div className="page-content__section">
             <section className="review-block">
