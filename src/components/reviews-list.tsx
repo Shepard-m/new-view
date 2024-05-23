@@ -34,7 +34,6 @@ export default function ReviewsList({ reviews }: TReviews) {
 
   const sortReviews = sortReviewsByDate(reviews);
 
-
   const dataReviews = sortReviews.slice(0, sizeReviews);
   return (
     <>
@@ -48,7 +47,6 @@ export default function ReviewsList({ reviews }: TReviews) {
             Показать больше отзывов
           </button>
           : ''}
-
       </div>
     </>
   );

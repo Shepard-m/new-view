@@ -3,7 +3,7 @@ import { fetchGetReviews } from '../../api-action';
 import { RequestStatus } from '../../../const';
 import { TReview } from '../../../types/review';
 
-type TInitialState = {
+export type TInitialState = {
   reviews: TReview[] | null;
   reviewsStatus: string;
 }

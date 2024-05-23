@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
 import { cameraSelectors } from '../store/slice/camera/cameraSelectors';
 import { fetchGetCamera, fetchGetPromos, fetchGetReviews, fetchGetSimilar } from '../store/api-action';
 import { Link, useParams } from 'react-router-dom';
-import { reviewsSelectors } from '../store/slice/reviews/revies-selectors';
+import { reviewsSelectors } from '../store/slice/reviews/reviews-selectors';
 import { Helmet } from 'react-helmet-async';
 import ProductInfo from '../components/product-info';
 import { AppRoute, OptionsStars } from '../const';

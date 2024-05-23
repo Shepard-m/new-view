@@ -25,14 +25,13 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
     coupon: null,
     tel: ''
   });
-  const { register, handleSubmit, formState: { errors } } = useForm<{ phone: string }>();
+  const { register, handleSubmit, formState: { errors }, clearErrors } = useForm<{ phone: string }>();
   const modalOverlay = useRef(null);
 
   const onCloseModalBuyKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Escape') {
       setIsActiveModal(false);
       document.removeEventListener('keydown', onCloseModalBuyKeyDown);
-      setPhone('');
     }
   };
 
@@ -40,18 +39,22 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
     if (evt.target === modalOverlay.current) {
       bodyContainer?.classList.remove(scrollLock);
       setIsActiveModal(false);
-      bodyContainer?.removeEventListener('click', onCloseModalClick);
-      bodyContainer?.removeEventListener('keydown', onCloseModalBuyKeyDown);
-      setPhone('');
+      document.removeEventListener('click', onCloseModalClick);
+      document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     }
   };
   useEffect(() => {
     if (isActiveModal && bodyContainer !== null) {
       bodyContainer.classList.add(scrollLock);
-      bodyContainer.addEventListener('click', onCloseModalClick);
+      document.addEventListener('click', onCloseModalClick);
     } else {
       bodyContainer?.classList.remove(scrollLock);
+      document.removeEventListener('click', onCloseModalClick);
+      document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     }
+    setPhone('');
+    clearErrors();
+    setOrder({ ...order, tel: '' });
   }, [isActiveModal]);
 
   function onOpenModalBuyClick() {
@@ -61,12 +64,12 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
 
   function onInputPhoneKeyDown(evt: SyntheticEvent<HTMLInputElement>) {
     setPhone(evt.currentTarget.value);
+    setOrder({ ...order, tel: evt.currentTarget.value });
   }
 
   function onCloseModalBuyClick() {
     bodyContainer?.removeEventListener('click', onCloseModalClick);
-    bodyContainer?.removeEventListener('keydown', onCloseModalBuyKeyDown);
-    setPhone('');
+    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     setIsActiveModal(false);
   }
 
@@ -75,9 +78,8 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
       .unwrap()
       .then(() => {
         setIsActiveModal(false);
-        document.removeEventListener('click', onCloseModalClick);
+        bodyContainer?.removeEventListener('click', onCloseModalClick);
         document.removeEventListener('keydown', onCloseModalBuyKeyDown);
-        setPhone('');
         toast.success(TextSuccess.ORDER);
       })
       .catch(() => {

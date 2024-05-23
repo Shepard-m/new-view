@@ -1,8 +1,8 @@
 export type TPromo = {
-  id: 1;
-  name: 'Ретрокамера Dus Auge lV';
-  previewImg: 'img/content/promo.jpg';
-  previewImg2x: 'img/content/promo@2x.jpg';
-  previewImgWebp: 'img/content/promo.webp';
-  previewImgWebp2x: 'img/content/promo@2x.webp';
+  id: number;
+  name: string;
+  previewImg: string;
+  previewImg2x: string;
+  previewImgWebp: string;
+  previewImgWebp2x: string;
 }

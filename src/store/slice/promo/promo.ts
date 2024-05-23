@@ -3,7 +3,7 @@ import { fetchGetPromos } from '../../api-action';
 import { RequestStatus } from '../../../const';
 import { TPromo } from '../../../types/promo';
 
-type TInitialState = {
+export type TInitialState = {
   promos: TPromo[] | null;
   selectedPromo: TPromo | undefined;
   promosStatus: string;
