@@ -82,7 +82,7 @@ export default function CameraPage() {
                   </picture>
                 </div>
                 <div className="product__content">
-                  <h1 className="title title--h3">{camera?.name}</h1>
+                  <h1 className="title title--h3">{camera.category} {camera.name}</h1>
                   <ListStars optionsStars={OptionsStars.REVIEWS} countComments={camera.reviewCount} countStar={camera.rating} />
                   <p className="product__price"><span className="visually-hidden">Цена:</span>{camera?.price} ₽</p>
                   <button className="btn btn--purple" type="button">
@@ -100,8 +100,9 @@ export default function CameraPage() {
             <div className="page-content__section">
               <SimilarList similar={similar} />
             </div>}
-
+          {/* {reviews?.length !== 0 && */}
           <div className="page-content__section">
+
             <section className="review-block">
               <div className="container">
                 <div className="page-content__headed">

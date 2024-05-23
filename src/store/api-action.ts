@@ -4,6 +4,7 @@ import { TProduct } from '../types/product';
 import { ApiRoute } from '../const';
 import { TReview } from '../types/review';
 import { TPromo } from '../types/promo';
+import { TOrder } from '../types/order';
 
 export const fetchCamerasProduct = createAsyncThunk<TProduct[], undefined, { extra: AxiosInstance }>(
   'data/fetchCamerasProduct',
@@ -44,5 +45,12 @@ export const fetchGetPromos = createAsyncThunk<TPromo[], undefined, { extra: Axi
     const { data } = await api.get<TPromo[]>(ApiRoute.PROMO);
 
     return data;
+  }
+);
+
+export const fetchPostOrder = createAsyncThunk<void, TOrder, { extra: AxiosInstance }>(
+  'fetchPostOrder',
+  async (order, { extra: api }) => {
+    await api.post(ApiRoute.ORDER, order);
   }
 );

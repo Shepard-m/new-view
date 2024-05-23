@@ -1,60 +1,88 @@
 import { Link } from 'react-router-dom';
 import { TProduct } from '../types/product';
-import { AppRoute, OptionsStars, TextError, VALIDATION_FORM_REG, scrollLock } from '../const';
-import { useEffect, useRef, useState } from 'react';
+import { AppRoute, OptionsStars, TextError, TextSuccess, VALIDATION_FORM_REG, scrollLock } from '../const';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import ListStars from './list-stars';
 import { useForm } from 'react-hook-form';
+import { formattingPhone } from '../utils/utils';
+import { useAppDispatch } from '../hooks/indexStore';
+import { fetchPostOrder } from '../store/api-action';
+import { toast } from 'react-toastify';
 
 type TProductCard = {
   camera: TProduct;
   isSimilar?: boolean;
 }
 
+const bodyContainer = document.querySelector('body');
+
 export default function ProductCard({ camera, isSimilar }: TProductCard) {
+  const dispatch = useAppDispatch();
   const [isActiveModal, setIsActiveModal] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [order, setOrder] = useState({
+    camerasIds: [camera.id],
+    coupon: null,
+    tel: ''
+  });
   const { register, handleSubmit, formState: { errors } } = useForm<{ phone: string }>();
   const modalOverlay = useRef(null);
-  useEffect(() => {
-    const bodyContainer = document.querySelector('body');
-    const onCloseModalClick = (evt: MouseEvent) => {
-      if (evt.target === modalOverlay.current) {
-        bodyContainer?.classList.remove(scrollLock);
-        setIsActiveModal(false);
-      }
-    };
-    if (isActiveModal && bodyContainer !== null) {
-      bodyContainer.classList.add(scrollLock);
-      document.addEventListener('click', onCloseModalClick);
-    } else {
-      bodyContainer?.classList.remove(scrollLock);
-      document.removeEventListener('click', onCloseModalClick);
-    }
-  }, [isActiveModal]);
 
   const onCloseModalBuyKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Escape') {
       setIsActiveModal(false);
       document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+      setPhone('');
     }
   };
+
+  const onCloseModalClick = (evt: MouseEvent) => {
+    if (evt.target === modalOverlay.current) {
+      bodyContainer?.classList.remove(scrollLock);
+      setIsActiveModal(false);
+      bodyContainer?.removeEventListener('click', onCloseModalClick);
+      bodyContainer?.removeEventListener('keydown', onCloseModalBuyKeyDown);
+      setPhone('');
+    }
+  };
+  useEffect(() => {
+    if (isActiveModal && bodyContainer !== null) {
+      bodyContainer.classList.add(scrollLock);
+      bodyContainer.addEventListener('click', onCloseModalClick);
+    } else {
+      bodyContainer?.classList.remove(scrollLock);
+    }
+  }, [isActiveModal]);
 
   function onOpenModalBuyClick() {
     setIsActiveModal(true);
     document.addEventListener('keydown', onCloseModalBuyKeyDown);
   }
 
-  function onAddBasketSubmit() {
+  function onInputPhoneKeyDown(evt: SyntheticEvent<HTMLInputElement>) {
+    setPhone(evt.currentTarget.value);
   }
 
   function onCloseModalBuyClick() {
-    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+    bodyContainer?.removeEventListener('click', onCloseModalClick);
+    bodyContainer?.removeEventListener('keydown', onCloseModalBuyKeyDown);
+    setPhone('');
     setIsActiveModal(false);
   }
 
-  if (!isActiveModal) {
-
-    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
-    document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+  function onAddBasketSubmit() {
+    dispatch(fetchPostOrder({ ...order, tel: formattingPhone(phone) }))
+      .unwrap()
+      .then(() => {
+        setIsActiveModal(false);
+        document.removeEventListener('click', onCloseModalClick);
+        document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+        setPhone('');
+        toast.success(TextSuccess.ORDER);
+      })
+      .catch(() => {
+        toast.error(TextError.ORDER);
+      });
   }
 
   return (
@@ -119,12 +147,13 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                       <use xlinkHref="#icon-snowflake" />
                     </svg>
                   </span>
-                  <input type="tel" placeholder="Введите ваш номер" tabIndex={0} required {...register('phone', {
+                  <input type="tel" value={phone} placeholder="Введите ваш номер" tabIndex={0} required {...register('phone', {
                     required: TextError.PHONE,
                     pattern: {
                       value: VALIDATION_FORM_REG,
                       message: TextError.PHONE
-                    }
+                    },
+                    onChange: onInputPhoneKeyDown
                   })}
                   />
                   {errors?.phone &&

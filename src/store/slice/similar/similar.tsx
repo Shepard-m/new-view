@@ -30,7 +30,6 @@ const similarSlice = createSlice({
   initialState,
   name: 'similar',
   reducers: {
-
   }
 });
 

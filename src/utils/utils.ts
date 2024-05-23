@@ -15,15 +15,14 @@ export const OPTIONS_TABS = {
 };
 
 export const formattingPhone = (tel: string) => {
-  let clearTel = '';
-  for (let i = 0; i < tel.length; i++) {
-    if (tel[i] === '-' ?? tel[i] === ' ') {
-      clearTel += '';
-      return;
-    }
-    clearTel += tel[i];
+  const cleanedTel = tel.replace(/[\s()-]/g, '');
+
+  if (cleanedTel.startsWith('8')) {
+    return `+7${cleanedTel.slice(1)}`;
   }
-  return clearTel;
+
+  return cleanedTel;
+
 };
 
 export const sortingSimilarList = (similarProducts: TProduct[]) => {
