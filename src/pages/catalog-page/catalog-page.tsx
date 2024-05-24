@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import CatalogProducts from '../components/catalog-products';
-import Container from '../components/container';
-import { useAppDispatch, useAppSelector } from '../hooks/indexStore';
-import { fetchCamerasProduct } from '../store/api-action';
+import CatalogProducts from '../../components/catalog-products/catalog-products';
+import Container from '../../components/container/container';
+import { useAppDispatch, useAppSelector } from '../../types/indexStore';
+import { fetchCamerasProduct } from '../../store/api-action';
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../const';
-import PromosCameras from '../components/promos-cameras';
+import { AppRoute } from '../../const';
+import PromosCameras from '../../components/promos-cameras/promos-cameras';
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export default function CatalogPage() {
 
   return (
     <Container>
-      <div>
+      <div data-testId={'catalog-page'}>
         <PromosCameras />
         <div className="page-content">
           <div className="breadcrumbs">

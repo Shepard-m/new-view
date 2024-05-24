@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { TProduct } from '../types/product';
-import ProductCard from './product-card';
-import { STEP_SLIDERS_SIMILAR } from '../const';
-import { sortingSimilarList } from '../utils/utils';
+import { TProduct } from '../../types/product';
+import ProductCard from '../product-card/product-card';
+import { STEP_SLIDERS_SIMILAR } from '../../const';
+import { sortingSimilarList } from '../../utils/utils';
 
 type TSimilarList = {
   similar: TProduct[];
@@ -25,7 +25,7 @@ export default function SimilarList({ similar }: TSimilarList) {
   }
 
   return (
-    <section className="product-similar">
+    <section className="product-similar" data-testId={'similar-list'}>
       <div className="container">
         <h2 className="title title--h3">Похожие товары</h2>
         <div className="product-similar__slider">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { TProduct } from '../types/product';
-import { OPTIONS_TABS } from '../utils/utils';
+import { TProduct } from '../../types/product';
+import { OPTIONS_TABS } from '../../utils/utils';
 
 type TProductInfo = {
   camera: TProduct;
@@ -15,7 +15,7 @@ export default function ProductInfo({ camera }: TProductInfo) {
     setInfoProduct(OPTIONS_TABS.DESCRIPTION);
   }
   return (
-    <div className="tabs product__tabs">
+    <div className="tabs product__tabs" data-testId={'product-info'}>
       <div className="tabs__controls product__tabs-controls">
         <button className={`tabs__control ${infoProduct === OPTIONS_TABS.OPTIONS ? 'is-active' : ''}`} type="button" onClick={onSelectOptionClick}>Характеристики</button>
         <button className={`tabs__control ${infoProduct === OPTIONS_TABS.DESCRIPTION ? 'is-active' : ''}`} type="button" onClick={onSelectDescriptionClick}>Описание</button>

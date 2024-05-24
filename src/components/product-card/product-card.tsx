@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { TProduct } from '../types/product';
-import { AppRoute, OptionsStars, TextError, TextSuccess, VALIDATION_FORM_REG, scrollLock } from '../const';
+import { TProduct } from '../../types/product';
+import { AppRoute, OptionsStars, TextError, TextSuccess, VALIDATION_FORM_REG, scrollLock } from '../../const';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
-import ListStars from './list-stars';
+import ListStars from '../list-stars/list-stars';
 import { useForm } from 'react-hook-form';
-import { formattingPhone } from '../utils/utils';
-import { useAppDispatch } from '../hooks/indexStore';
-import { fetchPostOrder } from '../store/api-action';
+import { formattingPhone } from '../../utils/utils';
+import { useAppDispatch } from '../../types/indexStore';
+import { fetchPostOrder } from '../../store/api-action';
 import { toast } from 'react-toastify';
 
 type TProductCard = {
@@ -89,7 +89,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
 
   return (
     <>
-      <div className={`product-card ${isSimilar ? 'is-active' : ''}`}>
+      <div className={`product-card ${isSimilar ? 'is-active' : ''}`} data-testId={'product-card'}>
         <div className="product-card__img">
           <picture>
             <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />

@@ -1,7 +1,7 @@
-import { OptionsStars } from '../const';
-import { TReview } from '../types/review';
-import { converterData } from '../utils/utils';
-import ListStars from './list-stars';
+import { OptionsStars } from '../../const';
+import { TReview } from '../../types/review';
+import { converterData } from '../../utils/utils';
+import ListStars from '../list-stars/list-stars';
 
 type TReviewUser = {
   review: TReview;
@@ -10,7 +10,7 @@ type TReviewUser = {
 export default function Review({ review }: TReviewUser) {
   const data = converterData(review.createAt);
   return (
-    <li className="review-card">
+    <li className="review-card" data-testId={'review'}>
       <div className="review-card__head">
         <p className="title title--h4">{review.userName}</p>
         <time className="review-card__data" dateTime="2022-04-13">{data}</time>

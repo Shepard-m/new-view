@@ -1,8 +1,5 @@
-import { store } from '../..';
 import { RequestStatus } from '../../../const';
-import { useAppSelector } from '../../../hooks/indexStore';
 import { mockPromos } from '../../../utils/moks';
-import { rootReducer } from '../../root-reduser';
 import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';
 import { orderSlice } from '../order/order';
@@ -12,7 +9,6 @@ import { promosSlice } from './promo';
 import { promosSelectors, promosStatusSelectors, selectedPromoSelectors } from './promo-selectors';
 
 describe('Promo selectors', () => {
-  const selectors = useAppSelector;
   const initialState = {
     [promosSlice.name]: {
       promos: mockPromos,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks/indexStore';
+import { useAppDispatch } from '../../types/indexStore';
 import { promosActions } from '../../store/slice/promo/promo';
 import { TPromo } from '../../types/promo';
 import ButtonPromo from '../button-promo/button-promo';
@@ -39,7 +39,7 @@ export default function ButtonsPromo({ promos, promo }: TButtonsPromo) {
   }
 
   return (
-    <ul className="banner__buttons-promo">
+    <ul className="banner__buttons-promo" data-testid={'buttons-promo'}>
       {promos.map((item, index) => <ButtonPromo key={item.id} idPromo={item.id} selectedPromoId={promo.id} handleSelectPromoClick={handleSelectPromoClick} indexButton={index} />)}
     </ul>
   );

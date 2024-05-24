@@ -1,5 +1,4 @@
 import { RequestStatus } from '../../../const';
-import { useAppSelector } from '../../../hooks/indexStore';
 import { mockPromos } from '../../../utils/moks';
 import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../const';
+import { AppRoute } from '../../const';
 
 export default function Header() {
   return (
-    <header className="header" id="header">
+    <header className="header" id="header" data-testId={'header'}>
       <div className="container">
         <Link className="header__logo" to={AppRoute.CATALOG} aria-label="Переход на главную">
           <svg width={100} height={36} aria-hidden="true">

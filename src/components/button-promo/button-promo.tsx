@@ -16,7 +16,7 @@ export default function ButtonPromo({ idPromo, selectedPromoId, handleSelectProm
 
 
   return (
-    <li className="banner__button-promo">
+    <li className="banner__button-promo" data-testId={'button-promo'}>
       {selectedPromoId === idPromo
         ?
         <img src="../../../public/img/sprite/button-promo-active.svg" alt="" data-id={idPromo} data-count={indexButton} />

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { TReview } from '../types/review';
-import Review from './review';
-import { sortReviewsByDate } from '../utils/utils';
-import { STEP_ADD_REVIEWS } from '../const';
+import { TReview } from '../../types/review';
+import Review from '../review/review';
+import { sortReviewsByDate } from '../../utils/utils';
+import { STEP_ADD_REVIEWS } from '../../const';
 
 type TReviews = {
   reviews: TReview[] | null;
@@ -37,7 +37,7 @@ export default function ReviewsList({ reviews }: TReviews) {
   const dataReviews = sortReviews.slice(0, sizeReviews);
   return (
     <>
-      <ul className="review-block__list" ref={reviewContainer} onWheel={onAddReviewsScrollWheel}>
+      <ul className="review-block__list" ref={reviewContainer} onWheel={onAddReviewsScrollWheel} data-testId={'reviews-list'}>
         {dataReviews.map((review) => <Review key={review.id} review={review} />)}
       </ul>
       <div className="review-block__buttons">

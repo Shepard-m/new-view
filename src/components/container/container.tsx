@@ -1,5 +1,5 @@
-import Footer from './footer';
-import Header from './header';
+import Footer from '../footer/footer';
+import Header from '../header/header';
 
 type TContainer = {
   children: JSX.Element;
@@ -11,14 +11,14 @@ export default function Container({ children, scroll }: TContainer) {
     window.scrollTo(0, 0);
   }
   return (
-    <div className='wrapper'>
+    <div className='wrapper' data-testid={'container'}>
       <Header />
       <main>
         {children}
       </main>
       {scroll
         &&
-        <a className="up-btn" onClick={onScrollTopClick}>
+        <a className="up-btn" onClick={onScrollTopClick} data-testid={'container-scroll'}>
           <svg width={12} height={18} aria-hidden="true">
             <use xlinkHref="#icon-arrow2" />
           </svg>

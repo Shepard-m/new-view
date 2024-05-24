@@ -1,4 +1,4 @@
-import { COUNT_STAR, OptionsStars } from '../const';
+import { COUNT_STAR, OptionsStars } from '../../const';
 
 type TStars = {
   countStar: number;
@@ -28,7 +28,7 @@ export default function ListStars({ countStar, optionsStars, countComments }: TS
     }
   }
   return (
-    <div className={`rate ${optionsStars.class}-card__rate`}>
+    <div className={`rate ${optionsStars.class}-card__rate`} data-testId={'list-stars'}>
       {listStars}{defaultListStars}
       <p className="visually-hidden">Оценка: {countStar}</p>
       {optionsStars.isText
