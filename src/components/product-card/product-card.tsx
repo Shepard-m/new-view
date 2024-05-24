@@ -80,16 +80,16 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
         setIsActiveModal(false);
         bodyContainer?.removeEventListener('click', onCloseModalClick);
         document.removeEventListener('keydown', onCloseModalBuyKeyDown);
-        toast.success(TextSuccess.ORDER);
+        toast.success(TextSuccess.ORDER, { autoClose: 2000 });
       })
       .catch(() => {
-        toast.error(TextError.ORDER);
+        toast.error(TextError.ORDER, { autoClose: 2000 });
       });
   }
 
   return (
     <>
-      <div className={`product-card ${isSimilar ? 'is-active' : ''}`} data-testId={'product-card'}>
+      <div className={`product-card ${isSimilar ? 'is-active' : ''}`} data-testid={'product-card'}>
         <div className="product-card__img">
           <picture>
             <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />

@@ -15,7 +15,7 @@ export default function ProductInfo({ camera }: TProductInfo) {
     setInfoProduct(OPTIONS_TABS.DESCRIPTION);
   }
   return (
-    <div className="tabs product__tabs" data-testId={'product-info'}>
+    <div className="tabs product__tabs" data-testid={'product-info'}>
       <div className="tabs__controls product__tabs-controls">
         <button className={`tabs__control ${infoProduct === OPTIONS_TABS.OPTIONS ? 'is-active' : ''}`} type="button" onClick={onSelectOptionClick}>Характеристики</button>
         <button className={`tabs__control ${infoProduct === OPTIONS_TABS.DESCRIPTION ? 'is-active' : ''}`} type="button" onClick={onSelectDescriptionClick}>Описание</button>

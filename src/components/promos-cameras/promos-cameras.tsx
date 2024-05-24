@@ -29,7 +29,7 @@ export default function PromosCameras() {
   }
 
   return (
-    <div className="banner" data-testId={'promos-cameras'}>
+    <div className="banner" data-testid={'promos-cameras'}>
       <picture>
         <source type="image/webp" srcSet={`${promo.previewImgWebp}, ${promo.previewImgWebp2x} 2x`} />
         <img src={promo.previewImg} srcSet={`${promo.previewImg2x} 2x`} width={1280} height={280} alt="баннер" />

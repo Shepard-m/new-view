@@ -37,7 +37,7 @@ export default function ReviewsList({ reviews }: TReviews) {
   const dataReviews = sortReviews.slice(0, sizeReviews);
   return (
     <>
-      <ul className="review-block__list" ref={reviewContainer} onWheel={onAddReviewsScrollWheel} data-testId={'reviews-list'}>
+      <ul className="review-block__list" ref={reviewContainer} onWheel={onAddReviewsScrollWheel} data-testid={'reviews-list'}>
         {dataReviews.map((review) => <Review key={review.id} review={review} />)}
       </ul>
       <div className="review-block__buttons">

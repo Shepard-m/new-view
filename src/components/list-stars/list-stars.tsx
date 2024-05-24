@@ -28,7 +28,7 @@ export default function ListStars({ countStar, optionsStars, countComments }: TS
     }
   }
   return (
-    <div className={`rate ${optionsStars.class}-card__rate`} data-testId={'list-stars'}>
+    <div className={`rate ${optionsStars.class}-card__rate`} data-testid={'list-stars'}>
       {listStars}{defaultListStars}
       <p className="visually-hidden">Оценка: {countStar}</p>
       {optionsStars.isText

@@ -10,14 +10,14 @@ import PromosCameras from '../../components/promos-cameras/promos-cameras';
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
   const cameras = useAppSelector((state) => state.catalog.cameras);
-
   useEffect(() => {
     dispatch(fetchCamerasProduct());
+
   }, []);
 
   return (
     <Container>
-      <div data-testId={'catalog-page'}>
+      <div data-testid={'catalog-page'}>
         <PromosCameras />
         <div className="page-content">
           <div className="breadcrumbs">
