@@ -21,9 +21,11 @@ export default function ReviewsList({ reviews }: TReviews) {
   };
 
   const onAddReviewsScrollWheel = (evt: React.WheelEvent<HTMLUListElement>) => {
-
-    if (evt.deltaY > 0) {
-      setSizeReviews(sizeReviews + STEP_ADD_REVIEWS);
+    if (reviewContainer.current) {
+      const { bottom } = reviewContainer.current.getBoundingClientRect();
+      if (evt.clientY >= bottom - 260 && evt.deltaY > 0) {
+        setSizeReviews(sizeReviews + STEP_ADD_REVIEWS);
+      }
     }
 
   };
