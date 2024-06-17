@@ -1,6 +1,7 @@
 export const AppRoute = {
   CATALOG: '/',
   CAMERA: '/camera',
+  NOT_FOUND: '*',
 };
 export const ApiRoute = {
   CAMERAS: '/cameras',
@@ -37,6 +38,7 @@ export const scrollLock = 'scroll-lock';
 
 export const TextError = {
   PHONE: 'некорректный телефон',
+  SERVER: 'ошибка загрузки данных',
   ORDER: 'Произошла  ошибка в формление заказа',
 };
 export const TextSuccess = {

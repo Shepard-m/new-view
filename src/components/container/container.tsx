@@ -8,7 +8,7 @@ type TContainer = {
 
 export default function Container({ children, scroll }: TContainer) {
   function onScrollTopClick() {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   return (
     <div className='wrapper' data-testid={'container'}>

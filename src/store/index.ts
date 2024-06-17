@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createAPI } from '../servies/api';
+import { createAPI } from '../server/api';
 import { rootReducer } from './root-reduser';
 import { State } from 'history';
 

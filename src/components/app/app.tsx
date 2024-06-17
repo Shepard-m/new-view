@@ -17,7 +17,7 @@ export default function App() {
           element={<CameraPage />}
         />
         <Route
-          path='*'
+          path={AppRoute.NOT_FOUND}
           element={<NotFoundPage />}
         />
       </Route>

@@ -27,11 +27,34 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
   });
   const { register, handleSubmit, formState: { errors }, clearErrors } = useForm<{ phone: string }>();
   const modalOverlay = useRef(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   const onCloseModalBuyKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Escape') {
       setIsActiveModal(false);
       document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+    }
+  };
+
+  const handleTabKey = (evt: KeyboardEvent) => {
+    if (evt.key === 'Tab' && modalContentRef.current) {
+      const focusableElements = modalContentRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (evt.shiftKey) {
+        if (document.activeElement === firstElement) {
+          evt.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          evt.preventDefault();
+          firstElement.focus();
+        }
+      }
     }
   };
 
@@ -41,16 +64,18 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
       setIsActiveModal(false);
       document.removeEventListener('click', onCloseModalClick);
       document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+      document.removeEventListener('keydown', onCloseModalBuyKeyDown);
     }
   };
   useEffect(() => {
     if (isActiveModal && bodyContainer !== null) {
       bodyContainer.classList.add(scrollLock);
       document.addEventListener('click', onCloseModalClick);
+      document.addEventListener('keydown', handleTabKey);
     } else {
       bodyContainer?.classList.remove(scrollLock);
       document.removeEventListener('click', onCloseModalClick);
-      document.removeEventListener('keydown', onCloseModalBuyKeyDown);
+      document.removeEventListener('keydown', handleTabKey);
     }
     setPhone('');
     clearErrors();
@@ -108,7 +133,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
           <button className="btn btn--purple product-card__btn" type="button" onClick={onOpenModalBuyClick}>
             Купить
           </button>
-          <Link className="btn btn--transparent" to={`${AppRoute.CAMERA}/${camera.id}`}>
+          <Link tabIndex={0} className="btn btn--transparent" to={`${AppRoute.CAMERA}/${camera.id}`}>
             Подробнее
           </Link>
         </div>
@@ -118,7 +143,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
         <div className={`modal ${isActiveModal ? 'is-active' : ''}`} >
           <div className="modal__wrapper">
             <div className="modal__overlay" ref={modalOverlay} />
-            <div className="modal__content">
+            <div className="modal__content" ref={modalContentRef}>
               <p className="title title--h4">Свяжитесь со мной</p>
               <div className="basket-item basket-item--short">
                 <div className="basket-item__img">
@@ -149,7 +174,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                       <use xlinkHref="#icon-snowflake" />
                     </svg>
                   </span>
-                  <input type="tel" value={phone} placeholder="Введите ваш номер" tabIndex={0} required {...register('phone', {
+                  <input tabIndex={0} type="tel" value={phone} placeholder="Введите ваш номер" required {...register('phone', {
                     required: TextError.PHONE,
                     pattern: {
                       value: VALIDATION_FORM_REG,
@@ -164,7 +189,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                 <p className="custom-input__error">Нужно указать номер</p>
               </div>
               <div className="modal__buttons">
-                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" tabIndex={0} onClick={(event) =>
+                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={(event) =>
                   void handleSubmit(onAddBasketSubmit)(event)}
                 >
                   <svg width={24} height={16} aria-hidden="true">
@@ -173,7 +198,7 @@ export default function ProductCard({ camera, isSimilar }: TProductCard) {
                   Заказать
                 </button>
               </div>
-              <button className="cross-btn" type="button" aria-label="Закрыть попап" tabIndex={0} onClick={onCloseModalBuyClick}>
+              <button tabIndex={0} className="cross-btn" type="button" aria-label="Закрыть попап" onClick={onCloseModalBuyClick}>
                 <svg width={10} height={10} aria-hidden="true">
                   <use xlinkHref="#icon-close" />
                 </svg>

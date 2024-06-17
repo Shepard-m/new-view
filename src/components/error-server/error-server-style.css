@@ -1,0 +1,22 @@
+.error {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.error__content {
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.error__fon {
+  width: 400px;
+  height: 400px;
+}
+
+.error__text {
+  color: red;
+  font-size: 22px;
+}

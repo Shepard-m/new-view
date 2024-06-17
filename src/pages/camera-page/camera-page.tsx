@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Container from '../../components/container/container';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { cameraSelectors } from '../../store/slice/camera/cameraSelectors';
 import { fetchGetCamera, fetchGetPromos, fetchGetReviews, fetchGetSimilar } from '../../store/api-action';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { reviewsSelectors } from '../../store/slice/reviews/reviews-selectors';
 import ProductInfo from '../../components/product-info/product-info';
 import { AppRoute, OptionsStars } from '../../const';
@@ -16,22 +16,32 @@ import { Helmet } from 'react-helmet-async';
 export default function CameraPage() {
   const dispatch = useAppDispatch();
   const { cameraId } = useParams();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const camera = useAppSelector(cameraSelectors);
+  const reviews = useAppSelector(reviewsSelectors);
+  const similar = useAppSelector(similarSelectors);
   useEffect(() => {
+    setIsLoading(true);
     Promise.all([
       dispatch(fetchGetCamera(cameraId as string)),
       dispatch(fetchGetReviews(cameraId as string)),
       dispatch(fetchGetSimilar(cameraId as string)),
       dispatch(fetchGetPromos())
-    ]);
+    ]).then(() => {
+      setIsLoading(false);
+    });
     window.scrollTo(0, 0);
-  }, [cameraId]);
+  }, [cameraId, navigate]);
 
-  const camera = useAppSelector(cameraSelectors);
-  const reviews = useAppSelector(reviewsSelectors);
-  const similar = useAppSelector(similarSelectors);
+  useEffect(() => {
+    if (!isLoading && camera === null) {
+      navigate(AppRoute.NOT_FOUND);
+    }
+  }, [isLoading, camera, navigate]);
 
   if (camera === null) {
-    return;
+    return null;
   }
 
   return (
