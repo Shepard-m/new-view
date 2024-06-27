@@ -27,6 +27,10 @@ const initialState: TInitialState = {
     type: null,
     level: null,
     disabledType: null,
+    placeholderPrice: {
+      from: 0,
+      to: 0,
+    },
   },
   directionSorting: DirectionSorting.TOP.direction,
   typeSorting: SettingSort.price.type,
@@ -44,6 +48,8 @@ const catalogSlice = createSlice({
         state.filterCameras = sortingCameras(state.cameras, state.typeSorting, state.directionSorting);
         state.filterSettings.price.from = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[0].price;
         state.filterSettings.price.to = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[state.filterCameras.length - 1].price;
+        state.filterSettings.placeholderPrice.from = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[0].price;
+        state.filterSettings.placeholderPrice.to = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[state.filterCameras.length - 1].price;
       })
       .addCase(fetchCamerasProduct.rejected, (state) => {
         state.statusCameras = RequestStatus.FAILED;
@@ -79,13 +85,13 @@ const catalogSlice = createSlice({
       const minFilterPrice = Math.min(...cameras);
       const maxFilterPrice = Math.max(...cameras);
 
-      if (action.payload.from < minFilterPrice) {
+      if (action.payload.from < minFilterPrice || action.payload.from > maxFilterPrice) {
         state.filterSettings.price.from = minFilterPrice;
       } else {
         state.filterSettings.price.from = action.payload.from;
       }
 
-      if (action.payload.to > maxFilterPrice) {
+      if (action.payload.to > maxFilterPrice || action.payload.to < minFilterPrice) {
         state.filterSettings.price.to = maxFilterPrice;
       } else {
         state.filterSettings.price.to = action.payload.to;
@@ -118,7 +124,7 @@ const catalogSlice = createSlice({
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
-      state.filterSettings.price = price;
+      state.filterSettings.placeholderPrice = price;
     },
     filterLevel: (state, action: PayloadAction<{ level: string }>) => {
       const levelElement = state.filterSettings.level?.find((type) => type === action.payload.level);
@@ -137,7 +143,7 @@ const catalogSlice = createSlice({
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
-      state.filterSettings.price = price;
+      state.filterSettings.placeholderPrice = price;
     },
     filterCategory: (state, action: PayloadAction<{ category: string }>) => {
       const filterDisabled = [];
@@ -151,7 +157,7 @@ const catalogSlice = createSlice({
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
-      state.filterSettings.price = price;
+      state.filterSettings.placeholderPrice = price;
     },
     clearFilter: (state) => {
       if (state.cameras === null) {
@@ -166,8 +172,13 @@ const catalogSlice = createSlice({
         type: null,
         level: null,
         disabledType: null,
+        placeholderPrice: {
+          from: sortingCameras(state.cameras as TProduct[], SettingSort.price.type, DirectionSorting.TOP.direction)[0].price,
+          to: sortingCameras(state.cameras as TProduct[], SettingSort.price.type, DirectionSorting.TOP.direction)[state.cameras?.length - 1].price
+        }
       };
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
+      state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
     }
   },
 });

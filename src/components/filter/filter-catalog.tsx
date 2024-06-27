@@ -48,12 +48,12 @@ export function FilterCatalog() {
     initialMinPrice = Math.min(...initialFilterPrice as number[]);
     initialMaxPrice = Math.max(...initialFilterPrice as number[]);
 
-    if (minPrice < initialMinPrice) {
+    if (minPrice < initialMinPrice || minPrice > initialMaxPrice) {
       setPrice({ ...price, from: (initialMinPrice).toString() });
       minPrice = initialMinPrice;
     }
 
-    if (maxPrice > initialMaxPrice) {
+    if (maxPrice > initialMaxPrice || maxPrice < initialMinPrice) {
       setPrice({ ...price, to: (initialMaxPrice).toString() });
       maxPrice = initialMaxPrice;
     }
@@ -108,12 +108,12 @@ export function FilterCatalog() {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" value={price.from} name="price" placeholder={`от ${filterSettings.price.from}`} onChange={onChangeMinPriceKeyDown} />
+                <input type="number" value={price.from} name="price" placeholder={`от ${filterSettings.placeholderPrice.from}`} onChange={onChangeMinPriceKeyDown} />
               </label>
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" value={price.to} name="priceUp" placeholder={`до ${filterSettings.price.to}`} onChange={onChangeMaxPriceKeyDown} />
+                <input type="number" value={price.to} name="priceUp" placeholder={`до ${filterSettings.placeholderPrice.to}`} onChange={onChangeMaxPriceKeyDown} />
               </label>
             </div>
           </div>

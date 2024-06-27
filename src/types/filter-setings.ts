@@ -6,4 +6,8 @@ export type filterSettings = {
   type: string[] | null;
   level: string[] | null;
   disabledType: string[] | null;
+  placeholderPrice: {
+    from: number;
+    to: number;
+  };
 };
