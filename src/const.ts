@@ -34,7 +34,55 @@ export const OptionsStars = {
   }
 };
 
+export const FilterType = {
+  DIGITAL: 'Цифровая',
+  FILM: 'Плёночная',
+  SNAPSHOT: 'Моментальная',
+  COLLECTION: 'Коллекционная',
+};
+
+export const FilterLevel = {
+  ZERO: 'Нулевой',
+  NON_PROFESSIONAL: 'Любительский',
+  PROFESSIONAL: 'Профессиональный',
+};
+
+export const FilterCategory = {
+  PHOTOCAMERA: {
+    value: 'Фотокамера',
+    data: 'Фотоаппарат'
+  },
+  VIDEOCAMERA: {
+    value: 'Видеокамера',
+    data: 'Видеокамера'
+  },
+};
+
 export const scrollLock = 'scroll-lock';
+
+export const SettingSort = {
+  price: {
+    type: 'Price',
+    value: 'по цене'
+  },
+  popularity: {
+    type: 'Popularity',
+    value: 'по популярности'
+  }
+};
+
+export const DirectionSorting = {
+  TOP: {
+    direction: 'top',
+    value: 'По возрастанию',
+    id: 'up',
+  },
+  DOWN: {
+    direction: 'down',
+    value: 'По убыванию',
+    id: 'down',
+  },
+};
 
 export const TextError = {
   PHONE: 'некорректный телефон',

@@ -1,26 +1,32 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { camerasSelectors } from '../../store/slice/catalog/catalog-selectros';
 import { AppRoute } from '../../const';
-import React, { ChangeEvent, useEffect, MouseEvent, useRef, useState, } from 'react';
+import { ChangeEvent, useEffect, MouseEvent, useRef, useState, KeyboardEvent, SyntheticEvent, } from 'react';
 import { useAppSelector } from '../../types/indexStore';
 import { TProduct } from '../../types/product';
 
 export default function Header() {
   const cameras = useAppSelector(camerasSelectors);
   const formInput = useRef<HTMLInputElement>(null);
-  const formListModal = useRef<HTMLLIElement>(null);
-
+  const formLiElement = useRef<HTMLLIElement>(null);
+  const formUlModal = useRef<HTMLUListElement>(null);
+  const navigate = useNavigate();
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
   const [valueInput, setValueInput] = useState<string>('');
   const [listCamerasSearch, setListCamerasSearch] = useState<TProduct[]>([]);
   const [isListOpen, setIsListOpen] = useState<boolean>(false);
 
-  function onClearSearchCameras(evt: MouseEvent) {
-    if (formInput.current !== evt.target ?? formListModal.current !== evt.target) {
-      setTimeout(() => {
-        setIsListOpen(false);
-        setValueInput('');
-      }, 500);
-      console.log(evt.target, formInput.current, formListModal.current);
+  function onClearSearchCameras(evt: MouseEvent<Document>) {
+    const target = evt.target as HTMLElement;
+
+    if (formInput.current !== target && formLiElement.current !== target && !target.classList.contains('form-search__select-item')) {
+      setIsListOpen(false);
+      setValueInput('');
+      setCurrentFocusIndex(-1);
+    }
+
+    if (formUlModal.current !== null) {
+      formUlModal.current.scrollTop = 0;
     }
   }
 
@@ -31,21 +37,58 @@ export default function Header() {
     } else if (valueInput.length < 3) {
       setIsListOpen(false);
     }
-    window.addEventListener('mousedown', onClearSearchCameras);
+    document.addEventListener('mouseup', onClearSearchCameras);
 
     return () => {
-      window.removeEventListener('mousedown', onClearSearchCameras);
+      document.removeEventListener('mouseup', onClearSearchCameras);
     };
   }, [valueInput, cameras]);
 
-  function onSelectCamera() {
-    setIsListOpen(false);
-    setValueInput('');
+  function onSelectCameraKeyDown(event: KeyboardEvent<HTMLLIElement>) {
+    if (event.code === 'Enter' && event.currentTarget.dataset.id !== undefined) {
+      navigate(`${AppRoute.CAMERA}/${event.currentTarget.dataset.id}`);
+      setIsListOpen(false);
+      setValueInput('');
+    }
+  }
+
+  function onSelectCameraClick(evt: SyntheticEvent<HTMLLIElement>) {
+    if (evt.currentTarget.dataset.id !== undefined) {
+      setIsListOpen(false);
+      setValueInput('');
+      navigate(`${AppRoute.CAMERA}/${evt.currentTarget.dataset.id}`);
+    }
   }
 
   function onSearchCameras(evt: ChangeEvent<HTMLInputElement>) {
     setValueInput(evt.target.value);
   }
+
+  const handleKeyDown = (evt: KeyboardEvent<HTMLInputElement | HTMLUListElement>) => {
+    if (evt.key === 'ArrowDown') {
+      setCurrentFocusIndex((prev) => {
+        const nextIndex = prev + 1;
+        return nextIndex < listCamerasSearch.length ? nextIndex : 0;
+      });
+    } else if (evt.key === 'ArrowUp') {
+      setCurrentFocusIndex((prev) => {
+        const prevIndex = prev - 1;
+        return prevIndex >= 0 ? prevIndex : listCamerasSearch.length - 1;
+      });
+    } else if (evt.key === 'Tab') {
+      evt.preventDefault();
+      setCurrentFocusIndex((prev) => (prev + 1) % listCamerasSearch.length);
+    }
+  };
+
+  useEffect(() => {
+    if (currentFocusIndex >= 0 && formUlModal.current) {
+      const listItems = formUlModal.current.querySelectorAll('li');
+      if (listItems[currentFocusIndex]) {
+        listItems[currentFocusIndex].focus();
+      }
+    }
+  }, [currentFocusIndex]);
 
   return (
     <header className="header" id="header" data-testid={'header'}>
@@ -73,10 +116,10 @@ export default function Header() {
               <svg className="form-search__icon" width={16} height={16} aria-hidden="true">
                 <use xlinkHref="#icon-lens" />
               </svg>
-              <input className="form-search__input" value={valueInput} type="text" autoComplete="off" placeholder="Поиск по сайту" ref={formInput} onChange={onSearchCameras} />
+              <input className="form-search__input" value={valueInput} type="text" autoComplete="off" placeholder="Поиск по сайту" ref={formInput} onChange={onSearchCameras} onKeyDown={handleKeyDown} />
             </label>
-            <ul className="form-search__select-list">
-              {listCamerasSearch?.map((camera) => <Link key={camera.id} tabIndex={-1} to={`${AppRoute.CAMERA}/${camera.id}`}><li ref={formListModal} className="form-search__select-item" onClick={onSelectCamera} tabIndex={0}>{camera.name}</li></Link>)}
+            <ul className="form-search__select-list" ref={formUlModal} onKeyDown={handleKeyDown}>
+              {listCamerasSearch?.map((camera) => <li key={camera.id} data-id={camera.id} ref={formLiElement} className="form-search__select-item" onKeyDown={onSelectCameraKeyDown} onClick={onSelectCameraClick} tabIndex={0}>{camera.name}</li>)}
             </ul>
           </form>
           <button className="form-search__reset" type="reset" onClick={onClearSearchCameras}>
