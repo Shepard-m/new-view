@@ -3,7 +3,7 @@ import 'dayjs/locale/ru';
 import { TReview } from '../types/review';
 import { TProduct } from '../types/product';
 import { Price } from '../types/price';
-import { DirectionSorting, FilterCategory, SettingSort } from '../const';
+import { DirectionSorting, FilterCategory, SettingSort, countCamerasForPage } from '../const';
 
 dayjs.locale('ru');
 
@@ -127,4 +127,12 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
       func(...args);
     }, delay);
   };
+}
+
+export function selectCamerasByPage(cameras: TProduct[], page: number) {
+  const from = countCamerasForPage * page - countCamerasForPage;
+  const to = countCamerasForPage * page;
+  const sliceCameras: TProduct[] = cameras.slice(from, to);
+
+  return sliceCameras;
 }

@@ -3,7 +3,7 @@ import { TProduct } from '../../../types/product';
 import { DirectionSorting, FilterCategory, FilterType, RequestStatus, SettingSort } from '../../../const';
 import { fetchCamerasProduct } from '../../api-action';
 import { filterSettings } from '../../../types/filter-setings';
-import { filterCatalog, selectMinAndMaxPrice, sortingCameras } from '../../../utils/utils';
+import { filterCatalog, selectCamerasByPage, selectMinAndMaxPrice, sortingCameras } from '../../../utils/utils';
 
 type TInitialState = {
   cameras: TProduct[] | null;
@@ -12,6 +12,8 @@ type TInitialState = {
   filterSettings: filterSettings;
   directionSorting: string;
   typeSorting: string;
+  currentPage: number;
+  sliceCamerasByPage: TProduct[] | null;
 };
 
 const initialState: TInitialState = {
@@ -32,6 +34,8 @@ const initialState: TInitialState = {
       to: 0,
     },
   },
+  currentPage: 1,
+  sliceCamerasByPage: null,
   directionSorting: DirectionSorting.TOP.direction,
   typeSorting: SettingSort.price.type,
 };
@@ -46,6 +50,7 @@ const catalogSlice = createSlice({
         state.statusCameras = RequestStatus.SUCCESS;
         state.cameras = action.payload;
         state.filterCameras = sortingCameras(state.cameras, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
         state.filterSettings.price.from = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[0].price;
         state.filterSettings.price.to = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[state.filterCameras.length - 1].price;
         state.filterSettings.placeholderPrice.from = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[0].price;
@@ -62,13 +67,13 @@ const catalogSlice = createSlice({
       if (action.payload.direction !== null) {
         state.directionSorting = action.payload.direction;
       }
-      state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
+      state.sliceCamerasByPage = sortingCameras(state.sliceCamerasByPage as TProduct[], state.typeSorting, state.directionSorting);
     },
     sortingByType: (state, action: PayloadAction<{ type: string | null }>) => {
       if (action.payload.type !== null) {
         state.typeSorting = action.payload.type;
       }
-      state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
+      state.sliceCamerasByPage = sortingCameras(state.sliceCamerasByPage as TProduct[], state.typeSorting, state.directionSorting);
     },
     filterPrice: (state, action: PayloadAction<{ from: number; to: number }>) => {
       const initialPrices = state.cameras?.map((element) => element.price);
@@ -106,6 +111,8 @@ const catalogSlice = createSlice({
 
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
+      state.currentPage = 1;
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
     },
     filterType: (state, action: PayloadAction<{ type: string }>) => {
       const typeElement = state.filterSettings.type?.find((type) => type === action.payload.type);
@@ -125,6 +132,8 @@ const catalogSlice = createSlice({
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
       state.filterSettings.placeholderPrice = price;
+      state.currentPage = 1;
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
     },
     filterLevel: (state, action: PayloadAction<{ level: string }>) => {
       const levelElement = state.filterSettings.level?.find((type) => type === action.payload.level);
@@ -144,6 +153,8 @@ const catalogSlice = createSlice({
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
       state.filterSettings.placeholderPrice = price;
+      state.currentPage = 1;
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
     },
     filterCategory: (state, action: PayloadAction<{ category: string }>) => {
       const filterDisabled = [];
@@ -158,6 +169,8 @@ const catalogSlice = createSlice({
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
       const price = selectMinAndMaxPrice(state.filterCameras);
       state.filterSettings.placeholderPrice = price;
+      state.currentPage = 1;
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
     },
     clearFilter: (state) => {
       if (state.cameras === null) {
@@ -179,6 +192,16 @@ const catalogSlice = createSlice({
       };
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.filterCameras = sortingCameras(state.filterCameras as TProduct[], state.typeSorting, state.directionSorting);
+      state.currentPage = 1;
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
+    },
+    selectPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.currentPage = action.payload.page;
+      if (state.filterCameras !== null) {
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
+      }
+
+      state.sliceCamerasByPage = sortingCameras(state.sliceCamerasByPage as TProduct[], state.typeSorting, state.directionSorting);
     }
   },
 });

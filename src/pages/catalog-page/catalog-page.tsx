@@ -9,12 +9,14 @@ import PromosCameras from '../../components/promos-cameras/promos-cameras';
 import { toast } from 'react-toastify';
 import ErrorServer from '../../components/error-server/error-server';
 import { FilterCatalog } from '../../components/filter/filter-catalog';
-import { filterCamerasSelectors } from '../../store/slice/catalog/catalog-selectros';
+import { filterCamerasSelectors, sliceCamerasByPageSelectors } from '../../store/slice/catalog/catalog-selectros';
 import CatalogSort from '../../components/catalog-sort/catalog-sort';
+import Pagination from '../../components/pagination/pagination';
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
-  const filterCameras = useAppSelector(filterCamerasSelectors);
+  const cameras = useAppSelector(sliceCamerasByPageSelectors);
+  const filteredListCameras = useAppSelector(filterCamerasSelectors);
   const [isServerError, setServerError] = useState(false);
   useEffect(() => {
     dispatch(fetchCamerasProduct())
@@ -27,7 +29,7 @@ export default function CatalogPage() {
 
   return (
     <Container>
-      {filterCameras === null && isServerError ? <ErrorServer />
+      {cameras === null && isServerError ? <ErrorServer />
         :
         <div data-testid={'catalog-page'}>
           <PromosCameras />
@@ -50,24 +52,13 @@ export default function CatalogPage() {
             </div>
             <section className="catalog">
               <div className="container">
-                <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
+                <h1 className="tit le title--h2">Каталог фото- и видеотехники</h1>
                 <div className="page-content__columns">
                   <FilterCatalog />
                   <div className="catalog__content">
                     <CatalogSort />
-                    <CatalogProducts cameras={filterCameras} />
-                    {/*<div class="pagination">
-                  <ul class="pagination__list">
-                    <li class="pagination__item"><a class="pagination__link pagination__link&#45;&#45;active" href="1">1</a>
-                    </li>
-                    <li class="pagination__item"><a class="pagination__link" href="2">2</a>
-                    </li>
-                    <li class="pagination__item"><a class="pagination__link" href="3">3</a>
-                    </li>
-                    <li class="pagination__item"><a class="pagination__link pagination__link&#45;&#45;text" href="2">Далее</a>
-                    </li>
-                  </ul>
-                </div>*/}
+                    <CatalogProducts cameras={cameras} />
+                    {filteredListCameras !== null && filteredListCameras?.length > 9 ? <Pagination/> : ''}
                   </div>
                 </div>
               </div>

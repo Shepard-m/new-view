@@ -1,3 +1,11 @@
+export const COUNT_STAR = 5;
+export const STEP_ADD_REVIEWS = 3;
+export const STEP_SLIDERS_SIMILAR = 3;
+export const VALIDATION_FORM_REG = /^(8|\+7)\s?[\s(]?9\d{2}[\s)]?\s?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+export const scrollLock = 'scroll-lock';
+export const countCamerasForPage = 9;
+export const visibleSizePaginationPage = 3;
+
 export const AppRoute = {
   CATALOG: '/',
   CAMERA: '/camera',
@@ -17,11 +25,6 @@ export const RequestStatus = {
   FAILED: 'failed',
   NONE: 'none'
 };
-
-export const COUNT_STAR = 5;
-export const STEP_ADD_REVIEWS = 3;
-export const STEP_SLIDERS_SIMILAR = 3;
-export const VALIDATION_FORM_REG = /^(8|\+7)\s?[\s(]?9\d{2}[\s)]?\s?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
 
 export const OptionsStars = {
   PRODUCT: {
@@ -58,7 +61,6 @@ export const FilterCategory = {
   },
 };
 
-export const scrollLock = 'scroll-lock';
 
 export const SettingSort = {
   price: {
