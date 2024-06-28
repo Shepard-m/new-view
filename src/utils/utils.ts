@@ -3,6 +3,7 @@ import 'dayjs/locale/ru';
 import { TReview } from '../types/review';
 import { TProduct } from '../types/product';
 import { Price } from '../types/price';
+import { NavigateFunction } from 'react-router-dom';
 import { DirectionSorting, FilterCategory, SettingSort, countCamerasForPage } from '../const';
 
 dayjs.locale('ru');
@@ -135,4 +136,15 @@ export function selectCamerasByPage(cameras: TProduct[], page: number) {
   const sliceCameras: TProduct[] = cameras.slice(from, to);
 
   return sliceCameras;
+}
+
+export function updateURLParameter(param: string, value: string, navigate: NavigateFunction) {
+  const url = new URL(window.location.href);
+  url.searchParams.set(param, value);
+  navigate(`${url.pathname}${url.search}`);
+}
+
+export function getURLParameter(param: string): string | null {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(param);
 }

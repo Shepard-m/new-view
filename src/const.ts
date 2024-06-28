@@ -94,3 +94,7 @@ export const TextError = {
 export const TextSuccess = {
   ORDER: 'Заказ добавлен в корзину',
 };
+
+export const OptionUrl = {
+  PAGE: 'page',
+};

@@ -1,12 +1,16 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { currentPageSelectors, filterCamerasSelectors } from '../../store/slice/catalog/catalog-selectros';
-import { countCamerasForPage, visibleSizePaginationPage } from '../../const';
+import { OptionUrl, countCamerasForPage, visibleSizePaginationPage } from '../../const';
 import { catalogActions } from '../../store/slice/catalog/catalog';
+import { getURLParameter, updateURLParameter } from '../../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function Pagination() {
   const selectPage = useAppSelector(currentPageSelectors);
   const cameras = useAppSelector(filterCamerasSelectors);
+  const urlOptionsPage = getURLParameter(OptionUrl.PAGE);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(selectPage);
   const [startIndex, setStartIndex] = useState(0);
@@ -20,7 +24,15 @@ export default function Pagination() {
   }
 
   useEffect(() => {
-    setCurrentPage(selectPage);
+    if (urlOptionsPage !== null) {
+      setCurrentPage(+urlOptionsPage);
+      dispatch(catalogActions.selectPage({page: +urlOptionsPage}));
+    } else {
+      setCurrentPage(selectPage);
+    }
+  }, []);
+
+  useEffect(() => {
     const listCountPage = [...Array(totalPages).keys()].map((i) => i + 1);
     setOriginalArray(listCountPage);
     if (listCountPage.length <= 3) {
@@ -37,6 +49,7 @@ export default function Pagination() {
       setStartIndex(startIndex + 1);
       setDisplayedPages(originalArray.slice(startIndex + 1, startIndex + 1 + visibleSizePaginationPage));
       setCurrentPage(newStartPage);
+      updateURLParameter(OptionUrl.PAGE, newStartPage.toString(), navigate);
       dispatch(catalogActions.selectPage({page: newStartPage}));
     }
   };
@@ -47,6 +60,7 @@ export default function Pagination() {
       setStartIndex(startIndex - 1);
       setDisplayedPages(originalArray.slice(startIndex - 1, startIndex - 1 + visibleSizePaginationPage));
       setCurrentPage(newStartPage);
+      updateURLParameter(OptionUrl.PAGE, newStartPage.toString(), navigate);
       dispatch(catalogActions.selectPage({page: newStartPage}));
     }
   };
@@ -59,6 +73,7 @@ export default function Pagination() {
 
     setCurrentPage(page);
     setDisplayedPages(originalArray.slice(startIndex, startIndex + visibleSizePaginationPage));
+    updateURLParameter(OptionUrl.PAGE, page.toString(), navigate);
     dispatch(catalogActions.selectPage({page}));
   };
 
