@@ -37,8 +37,6 @@ export default function NotFoundPage() {
           Перейти на главную страницу
         </Link>
       </p>
-
     </div>
-
   );
 }

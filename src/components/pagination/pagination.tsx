@@ -16,7 +16,6 @@ export default function Pagination() {
   const [startIndex, setStartIndex] = useState(0);
   const [originalArray, setOriginalArray] = useState<number[]>([]);
   const [displayedPages, setDisplayedPages] = useState<number[]>([]);
-
   let totalPages = 0;
 
   if (cameras !== null) {
@@ -24,9 +23,24 @@ export default function Pagination() {
   }
 
   useEffect(() => {
+    setCurrentPage(selectPage);
+    updateURLParameter(OptionUrl.PAGE, selectPage.toString(), navigate);
+  }, [selectPage]);
+
+  useEffect(() => {
     if (urlOptionsPage !== null) {
+      if (+urlOptionsPage > 3) {
+        const listCountPage = [...Array(totalPages).keys()].map((i) => i + 1);
+        const startIndexPage = +urlOptionsPage - visibleSizePaginationPage;
+        setStartIndex(+urlOptionsPage - visibleSizePaginationPage);
+        setTimeout(() => {
+          setDisplayedPages(listCountPage.slice(startIndexPage, startIndexPage + visibleSizePaginationPage));
+        }, 1000);
+      }
       setCurrentPage(+urlOptionsPage);
-      dispatch(catalogActions.selectPage({page: +urlOptionsPage}));
+      setTimeout(() => {
+        dispatch(catalogActions.selectPage({page: +urlOptionsPage}));
+      }, 1000);
     } else {
       setCurrentPage(selectPage);
     }
@@ -45,8 +59,8 @@ export default function Pagination() {
 
   const onNextSelectPageClick = () => {
     if (displayedPages[displayedPages.length - 1] < originalArray[originalArray.length - 1]) {
-      const newStartPage = currentPage + 1;
-      setStartIndex(startIndex + 1);
+      const newStartPage = Math.max(...displayedPages) + 1;
+      setStartIndex(newStartPage - 1);
       setDisplayedPages(originalArray.slice(startIndex + 1, startIndex + 1 + visibleSizePaginationPage));
       setCurrentPage(newStartPage);
       updateURLParameter(OptionUrl.PAGE, newStartPage.toString(), navigate);
@@ -56,8 +70,8 @@ export default function Pagination() {
 
   const onBackSelectPageClick = () => {
     if (displayedPages[0] !== originalArray[0]) {
-      const newStartPage = currentPage - 1;
-      setStartIndex(startIndex - 1);
+      const newStartPage = Math.min(...displayedPages) - 1;
+      setStartIndex(newStartPage - 1);
       setDisplayedPages(originalArray.slice(startIndex - 1, startIndex - 1 + visibleSizePaginationPage));
       setCurrentPage(newStartPage);
       updateURLParameter(OptionUrl.PAGE, newStartPage.toString(), navigate);

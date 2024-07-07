@@ -97,4 +97,11 @@ export const TextSuccess = {
 
 export const OptionUrl = {
   PAGE: 'page',
+  PRICE_MIN: 'priceMin',
+  PRICE_MAX: 'priceMax',
+  CATEGORY_FILTER: 'categoryFilter',
+  TYPE_FILTER: 'typeFilter',
+  LEVEL_FILTER: 'levelFilter',
+  TYPE_SORT: 'typeSort',
+  DIRECTION_SORT: 'directionSort',
 };

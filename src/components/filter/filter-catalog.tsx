@@ -1,15 +1,22 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState } from 'react';
-import { FilterCategory, FilterLevel, FilterType } from '../../const';
+import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { FilterCategory, FilterLevel, FilterType, OptionUrl, countCamerasForPage } from '../../const';
 import { catalogActions } from '../../store/slice/catalog/catalog';
 import { FilterLevelsKeys, FilterLevelsValues, FilterTypeKeys, FilterTypeValues } from '../../types/filter-index';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
-import { camerasSelectors, filterSettingsSelectors } from '../../store/slice/catalog/catalog-selectros';
-import { debounce, filterCatalog } from '../../utils/utils';
+import { camerasSelectors, filterCamerasSelectors, filterSettingsSelectors } from '../../store/slice/catalog/catalog-selectros';
+import { updateURLParameterMulti, getURLParameterMulti, debounce, filterCatalog, getURLParameter, updateURLParameter, deleteURLParameter } from '../../utils/utils';
 import { TProduct } from '../../types/product';
+import { useNavigate } from 'react-router-dom';
 
 
 export function FilterCatalog() {
   const filterSettings = useAppSelector(filterSettingsSelectors);
+  const navigate = useNavigate();
+  const filterCameras = useAppSelector(filterCamerasSelectors);
+  const parametersUrl = Object.values(OptionUrl);
+  const [levelFilter, setLevelFilter] = useState<string[]>(['']);
+  const [typeFilter, setTypeFilter] = useState<string[]>(['']);
+  const [isCameras, setIsCameras] = useState<boolean>(false);
   const cameras = useAppSelector(camerasSelectors);
   const [price, setPrice] = useState<{ from: string; to: string }>({ from: '', to: '' });
   const dispatch = useAppDispatch();
@@ -17,11 +24,75 @@ export function FilterCatalog() {
     id: key as FilterTypeKeys,
     value
   }));
-  const listLevels: { id: FilterLevelsKeys; value: FilterLevelsValues }[] = (Object.entries(FilterLevel)).map(([key, value]) => ({
+  const listLevels: { id: FilterLevelsKeys; value: FilterLevelsValues; index: number }[] = (Object.entries(FilterLevel)).map(([key, value], index) => ({
     id: key as FilterLevelsKeys,
+    index: index++,
     value
   }));
   const listCategory = Object.values(FilterCategory);
+
+  useEffect(() => {
+    if (filterCameras === null) {
+      return;
+    }
+    const totalPages = Math.ceil(filterCameras?.length / countCamerasForPage);
+    if (totalPages === 1) {
+      updateURLParameter(OptionUrl.PAGE, '1', navigate);
+    }
+  }, [filterCameras]);
+
+  useEffect(() => {
+    if (filterSettings.level) {
+      setLevelFilter(filterSettings.level);
+    }
+  }, [filterSettings.level]);
+
+  useEffect(() => {
+    if (filterSettings.type) {
+      setTypeFilter(filterSettings.type);
+    }
+  }, [filterSettings.type]);
+
+  useEffect(() => {
+    const category = getURLParameter(OptionUrl.CATEGORY_FILTER);
+    const type = getURLParameterMulti(OptionUrl.TYPE_FILTER);
+    const level = getURLParameterMulti(OptionUrl.LEVEL_FILTER);
+    const priceMin = getURLParameter(OptionUrl.PRICE_MIN);
+    const priceMax = getURLParameter(OptionUrl.PRICE_MAX);
+    if (cameras === null && cameras !== null) {
+      return;
+    }
+    if (priceMin !== null && priceMax !== null && cameras !== null) {
+      setPrice({ from: priceMin, to: priceMax });
+      setTimeout(() => {
+        dispatch(catalogActions.filterPrice({ from: +priceMin, to: +priceMax }));
+      }, 500);
+    }
+    if (category !== null && cameras !== null) {
+      dispatch(catalogActions.filterCategory({ category: category }));
+    }
+    if (type !== null && cameras !== null) {
+      for (const iterator of type) {
+        dispatch(catalogActions.filterType({ type: iterator }));
+      }
+      setTypeFilter(type);
+
+    }
+    if (level.length > 0 && cameras !== null) {
+      for (const iterator of level) {
+        dispatch(catalogActions.filterLevel({ level: iterator }));
+      }
+      setLevelFilter(level);
+    }
+  }, [isCameras]);
+
+  useEffect(() => {
+    if (cameras !== null) {
+      setIsCameras(true);
+    } else {
+      setIsCameras(false);
+    }
+  }, [cameras]);
 
   const debouncedLog = useCallback(debounce((value: { from: string; to: string }) => {
     if (cameras === null) {
@@ -33,8 +104,13 @@ export function FilterCatalog() {
     let initialMinPrice = Math.min(...initialPrices);
     let initialMaxPrice = Math.max(...initialPrices);
     let initialFilterPrice: undefined | number[] = [];
-    let filterCameras: null | TProduct[] = null;
+    let copyFilterCameras: null | TProduct[] = null;
 
+
+    copyFilterCameras = filterCatalog(cameras, filterSettings.category, { from: initialMinPrice, to: initialMaxPrice }, filterSettings.type, filterSettings.level, filterSettings.disabledType);
+    initialFilterPrice = copyFilterCameras?.map((element) => element.price);
+    initialMinPrice = Math.min(...initialFilterPrice);
+    initialMaxPrice = Math.max(...initialFilterPrice);
     if (value.from === '') {
       minPrice = Math.min(...initialPrices);
     }
@@ -42,23 +118,19 @@ export function FilterCatalog() {
       maxPrice = Math.max(...initialPrices);
     }
 
-    filterCameras = filterCatalog(cameras, filterSettings.category, { from: initialMinPrice, to: initialMaxPrice }, filterSettings.type, filterSettings.level, filterSettings.disabledType);
-    initialFilterPrice = filterCameras?.map((element) => element.price);
-
-    initialMinPrice = Math.min(...initialFilterPrice as number[]);
-    initialMaxPrice = Math.max(...initialFilterPrice as number[]);
-
-    if (minPrice < initialMinPrice || minPrice > initialMaxPrice) {
+    if (minPrice < initialMinPrice || minPrice > initialMaxPrice || minPrice > maxPrice) {
       setPrice({ ...price, from: (initialMinPrice).toString() });
       minPrice = initialMinPrice;
     }
 
-    if (maxPrice > initialMaxPrice || maxPrice < initialMinPrice) {
+    if (maxPrice > initialMaxPrice || maxPrice < initialMinPrice || maxPrice < minPrice) {
       setPrice({ ...price, to: (initialMaxPrice).toString() });
       maxPrice = initialMaxPrice;
     }
-
     dispatch(catalogActions.filterPrice({ from: minPrice, to: maxPrice }));
+
+    updateURLParameter(OptionUrl.PRICE_MIN, minPrice.toString(), navigate);
+    updateURLParameter(OptionUrl.PRICE_MAX, maxPrice.toString(), navigate);
 
     setPrice({ from: minPrice.toString(), to: maxPrice.toString() });
   }, 1000), [filterSettings, cameras]);
@@ -67,14 +139,27 @@ export function FilterCatalog() {
     if (evt.currentTarget.dataset.id) {
       dispatch(catalogActions.filterType({ type: evt.currentTarget.dataset.id }));
     }
+
+    setTimeout(() => {
+      if (filterSettings.type !== null) {
+        updateURLParameterMulti(OptionUrl.TYPE_FILTER, filterSettings.type, navigate);
+      }
+    }, 500);
   }
   function onSelectLevelClick(evt: SyntheticEvent<HTMLSpanElement>) {
     if (evt.currentTarget.dataset.id) {
       dispatch(catalogActions.filterLevel({ level: evt.currentTarget.dataset.id }));
     }
+
+    setTimeout(() => {
+      if (filterSettings.level !== null) {
+        updateURLParameterMulti(OptionUrl.LEVEL_FILTER, filterSettings.level, navigate);
+      }
+    }, 500);
   }
   function onSelectCategoryClick(evt: SyntheticEvent<HTMLSpanElement>) {
     if (evt.currentTarget.dataset.id) {
+      updateURLParameter(OptionUrl.CATEGORY_FILTER, evt.currentTarget.dataset.id, navigate);
       dispatch(catalogActions.filterCategory({ category: evt.currentTarget.dataset.id }));
     }
   }
@@ -96,6 +181,11 @@ export function FilterCatalog() {
 
   function onClearFormFilterSubmit() {
     setPrice({ from: '', to: '' });
+    setLevelFilter(['']);
+    setTypeFilter(['']);
+    for (const iterator of parametersUrl) {
+      deleteURLParameter(iterator, navigate);
+    }
     dispatch(catalogActions.clearFilter());
   }
 
@@ -123,7 +213,7 @@ export function FilterCatalog() {
           {listCategory.map((category) => (
             <div key={category.value} className="custom-radio catalog-filter__item">
               <label>
-                <input type="radio" name="category" />
+                <input type="radio" name="category" checked={category.data === filterSettings.category} onChange={onSelectCategoryClick}/>
                 <span data-id={category.data} className="custom-radio__icon" onClick={onSelectCategoryClick} />
                 <span data-id={category.data} className="custom-radio__label" onClick={onSelectCategoryClick}>{category.value}</span>
               </label>
@@ -135,7 +225,7 @@ export function FilterCatalog() {
           {listTypes.map((type) => (
             <div key={type.id} className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name={type.id.toLowerCase()} disabled={Array.isArray(filterSettings.disabledType) && filterSettings.disabledType.includes(String(type.value))} />
+                <input type="checkbox" name={type.id.toLowerCase()} checked={typeFilter.includes(type.value)} disabled={Array.isArray(filterSettings.disabledType) && filterSettings.disabledType.includes(String(type.value))} onChange={onSelectTypeClick}/>
                 <span data-id={type.value} onClick={onSelectTypeClick} className="custom-checkbox__icon" />
                 <span data-id={type.value} onClick={onSelectTypeClick} className="custom-checkbox__label">{type.value}</span>
               </label>
@@ -147,7 +237,7 @@ export function FilterCatalog() {
           {listLevels.map((level) => (
             <div key={level.id} className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name={level.id.toLocaleLowerCase()} />
+                <input type="checkbox" name={level.id.toLocaleLowerCase()} checked={levelFilter.includes(level.value)} onChange={onSelectLevelClick}/>
                 <span data-id={level.value} onClick={onSelectLevelClick} className="custom-checkbox__icon" />
                 <span data-id={level.value} onClick={onSelectLevelClick} className="custom-checkbox__label">{level.value}</span>
               </label>

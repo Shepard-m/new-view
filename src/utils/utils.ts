@@ -7,7 +7,6 @@ import { NavigateFunction } from 'react-router-dom';
 import { DirectionSorting, FilterCategory, SettingSort, countCamerasForPage } from '../const';
 
 dayjs.locale('ru');
-
 export const converterData = (data: string) => dayjs(data).format('D MMMM');
 
 export const sortReviewsByDate = (reviews: TReview[]) => [...reviews].sort((a, b) => dayjs(b.createAt).diff(dayjs(a.createAt)));
@@ -30,9 +29,8 @@ export const formattingPhone = (tel: string) => {
 
 export const filterCatalog = (initialCatalog: TProduct[] | null, category: string | null, price: Price, type: string[] | null, level: string[] | null, typeDisabled: string[] | null) => {
   if (initialCatalog === null) {
-    return null;
+    return [];
   }
-
   let filterCameras: TProduct[] = [...initialCatalog];
 
   if (price.from !== null && price.to !== null) {
@@ -61,7 +59,6 @@ export const filterCatalog = (initialCatalog: TProduct[] | null, category: strin
       level.map((l) => l.toLowerCase()).includes(camera.level.toLowerCase())
     );
   }
-
   return filterCameras;
 };
 
@@ -116,7 +113,7 @@ export const sortingSimilarList = (similarProducts: TProduct[]) => {
   return copySimilar;
 };
 
-export function debounce<T extends (...args: any[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: Parameters<T>) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>;
 
   return (...args: Parameters<T>) => {
@@ -130,11 +127,38 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
   };
 }
 
-export function selectCamerasByPage(cameras: TProduct[], page: number) {
+export function selectCamerasByPage(cameras: TProduct[] | null, page: number, typeSort: string, direction: string) {
+  if (cameras === null) {
+    return [];
+  }
   const from = countCamerasForPage * page - countCamerasForPage;
   const to = countCamerasForPage * page;
   const sliceCameras: TProduct[] = cameras.slice(from, to);
+  if (typeSort === SettingSort.price.type) {
+    switch (direction) {
+      case DirectionSorting.TOP.direction:
+        sliceCameras.sort((a: TProduct, b: TProduct) => a.price - b.price);
+        break;
+      case DirectionSorting.DOWN.direction:
+        sliceCameras.sort((a: TProduct, b: TProduct) => b.price - a.price);
+        break;
+      default:
+        sliceCameras.sort((a: TProduct, b: TProduct) => a.price - b.price);
+    }
+  }
 
+  if (typeSort === SettingSort.popularity.type) {
+    switch (direction) {
+      case DirectionSorting.TOP.direction:
+        sliceCameras.sort((a: TProduct, b: TProduct) => a.rating - b.rating);
+        break;
+      case DirectionSorting.DOWN.direction:
+        sliceCameras.sort((a: TProduct, b: TProduct) => b.rating - a.rating);
+        break;
+      default:
+        sliceCameras.sort((a: TProduct, b: TProduct) => a.rating - b.rating);
+    }
+  }
   return sliceCameras;
 }
 
@@ -147,4 +171,30 @@ export function updateURLParameter(param: string, value: string, navigate: Navig
 export function getURLParameter(param: string): string | null {
   const url = new URL(window.location.href);
   return url.searchParams.get(param);
+}
+
+export function getURLParameterMulti(param: string): string[] {
+  const url = new URL(window.location.href);
+  const paramValue = url.searchParams.get(param);
+  return paramValue ? paramValue.split(',') : [];
+}
+
+export function updateURLParameterMulti(param: string, values: string[], navigate: NavigateFunction) {
+  const url = new URL(window.location.href);
+  if (values.length > 0) {
+    url.searchParams.set(param, values.join(','));
+  } else {
+    url.searchParams.delete(param);
+  }
+
+  navigate(`${url.pathname}${url.search}`);
+}
+
+export function deleteURLParameter(param: string, navigate: NavigateFunction) {
+  const url = new URL(window.location.href);
+  if (url.searchParams.has(param)) {
+    url.searchParams.delete(param);
+  }
+
+  navigate(`${url.pathname}${url.search}`);
 }

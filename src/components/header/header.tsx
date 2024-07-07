@@ -16,7 +16,7 @@ export default function Header() {
   const [listCamerasSearch, setListCamerasSearch] = useState<TProduct[]>([]);
   const [isListOpen, setIsListOpen] = useState<boolean>(false);
 
-  function onClearSearchCameras(evt: MouseEvent<Document>) {
+  function onClearSearchCameras(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
 
     if (formInput.current !== target && formLiElement.current !== target && !target.classList.contains('form-search__select-item')) {
@@ -34,13 +34,14 @@ export default function Header() {
     if (cameras !== null && valueInput.length >= 3) {
       setIsListOpen(true);
       setListCamerasSearch([...cameras].filter((camera) => camera.name.toLowerCase().includes(valueInput.toLowerCase())));
-    } else if (valueInput.length < 3) {
+    }
+    if (valueInput.length < 3) {
       setIsListOpen(false);
     }
-    document.addEventListener('mouseup', onClearSearchCameras);
+    document.addEventListener('mouseup', onClearSearchCameras as unknown as EventListener);
 
     return () => {
-      document.removeEventListener('mouseup', onClearSearchCameras);
+      document.removeEventListener('mouseup', onClearSearchCameras as unknown as EventListener);
     };
   }, [valueInput, cameras]);
 
@@ -60,11 +61,11 @@ export default function Header() {
     }
   }
 
-  function onSearchCameras(evt: ChangeEvent<HTMLInputElement>) {
+  function onSearchCamerasChange(evt: ChangeEvent<HTMLInputElement>) {
     setValueInput(evt.target.value);
   }
 
-  const handleKeyDown = (evt: KeyboardEvent<HTMLInputElement | HTMLUListElement>) => {
+  const onArrowKeyDown = (evt: KeyboardEvent<HTMLInputElement | HTMLUListElement>) => {
     if (evt.key === 'ArrowDown') {
       setCurrentFocusIndex((prev) => {
         const nextIndex = prev + 1;
@@ -116,9 +117,9 @@ export default function Header() {
               <svg className="form-search__icon" width={16} height={16} aria-hidden="true">
                 <use xlinkHref="#icon-lens" />
               </svg>
-              <input className="form-search__input" value={valueInput} type="text" autoComplete="off" placeholder="Поиск по сайту" ref={formInput} onChange={onSearchCameras} onKeyDown={handleKeyDown} />
+              <input className="form-search__input" value={valueInput} type="text" autoComplete="off" placeholder="Поиск по сайту" ref={formInput} onChange={onSearchCamerasChange} onKeyDown={onArrowKeyDown} />
             </label>
-            <ul className="form-search__select-list" ref={formUlModal} onKeyDown={handleKeyDown}>
+            <ul className="form-search__select-list" ref={formUlModal} onKeyDown={onArrowKeyDown}>
               {listCamerasSearch?.map((camera) => <li key={camera.id} data-id={camera.id} ref={formLiElement} className="form-search__select-item" onKeyDown={onSelectCameraKeyDown} onClick={onSelectCameraClick} tabIndex={0}>{camera.name}</li>)}
             </ul>
           </form>
