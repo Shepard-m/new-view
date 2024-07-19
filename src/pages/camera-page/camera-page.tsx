@@ -41,7 +41,7 @@ export default function CameraPage() {
   }, [isLoading, camera, navigate]);
 
   if (camera === null) {
-    return null;
+    return <span></span>;
   }
 
   return (

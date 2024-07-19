@@ -59,12 +59,17 @@ export default function Pagination() {
 
   const onNextSelectPageClick = () => {
     if (displayedPages[displayedPages.length - 1] < originalArray[originalArray.length - 1]) {
-      const newStartPage = Math.max(...displayedPages) + 1;
-      setStartIndex(newStartPage - 1);
-      setDisplayedPages(originalArray.slice(startIndex + 1, startIndex + 1 + visibleSizePaginationPage));
-      setCurrentPage(newStartPage);
-      updateURLParameter(OptionUrl.PAGE, newStartPage.toString(), navigate);
-      dispatch(catalogActions.selectPage({page: newStartPage}));
+      const newCurrentPage = Math.max(...displayedPages) + 1;
+      const copyDisplayedPages = originalArray.slice(startIndex + 1, startIndex + 1 + visibleSizePaginationPage);
+      if (newCurrentPage === originalArray[originalArray.length - 1] || newCurrentPage === originalArray[originalArray.length - 2]) {
+        setStartIndex(newCurrentPage - 3);
+      } else {
+        setStartIndex(newCurrentPage - 1);
+      }
+      setDisplayedPages(copyDisplayedPages);
+      setCurrentPage(newCurrentPage);
+      updateURLParameter(OptionUrl.PAGE, newCurrentPage.toString(), navigate);
+      dispatch(catalogActions.selectPage({page: newCurrentPage}));
     }
   };
 
@@ -87,6 +92,7 @@ export default function Pagination() {
 
     setCurrentPage(page);
     setDisplayedPages(originalArray.slice(startIndex, startIndex + visibleSizePaginationPage));
+    // console.log(page, displayedPages)
     updateURLParameter(OptionUrl.PAGE, page.toString(), navigate);
     dispatch(catalogActions.selectPage({page}));
   };

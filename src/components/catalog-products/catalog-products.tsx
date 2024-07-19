@@ -8,7 +8,7 @@ type TCatalogProducts = {
 
 export default function CatalogProducts({ cameras }: TCatalogProducts) {
   if (cameras === null) {
-    return '';
+    return <div></div>;
   }
   return (cameras.length === 0 ? <CatalogEmpty /> :
     <div className="cards catalog__cards" data-testid={'CatalogProducts'}>

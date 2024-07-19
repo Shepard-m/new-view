@@ -76,7 +76,6 @@ export function FilterCatalog() {
         dispatch(catalogActions.filterType({ type: iterator }));
       }
       setTypeFilter(type);
-
     }
     if (level.length > 0 && cameras !== null) {
       for (const iterator of level) {
@@ -93,6 +92,19 @@ export function FilterCatalog() {
       setIsCameras(false);
     }
   }, [cameras]);
+
+  useEffect(() => {
+    const typesUrlParameters = [];
+    if (filterSettings.disabledType?.length !== 0 && filterSettings.disabledType !== null) {
+      deleteURLParameter(OptionUrl.TYPE_FILTER, navigate);
+    }
+    if (filterSettings.type !== null && filterSettings.type.length > 0) {
+      for (const type of filterSettings.type) {
+        typesUrlParameters.push(type);
+      }
+      updateURLParameterMulti(OptionUrl.TYPE_FILTER, typesUrlParameters, navigate);
+    }
+  }, [filterSettings.category]);
 
   const debouncedLog = useCallback(debounce((value: { from: string; to: string }) => {
     if (cameras === null) {

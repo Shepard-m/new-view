@@ -1,4 +1,4 @@
-import { RequestStatus } from '../../../const';
+import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
 import { mockPromos } from '../../../utils/moks';
 import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';
@@ -33,6 +33,25 @@ describe('Order selectors', () => {
     [catalogSlice.name]: {
       statusCameras: RequestStatus.NONE,
       cameras: null,
+      filterCameras: null,
+      filterSettings: {
+        price: {
+          from: 0,
+          to: 0
+        },
+        category: null,
+        type: null,
+        level: null,
+        disabledType: null,
+        placeholderPrice: {
+          from: 0,
+          to: 0,
+        },
+      },
+      currentPage: 1,
+      sliceCamerasByPage: null,
+      directionSorting: DirectionSorting.TOP.direction,
+      typeSorting: SettingSort.price.type,
     },
   };
   it('should return similar', () => {

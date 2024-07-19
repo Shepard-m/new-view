@@ -172,13 +172,23 @@ const catalogSlice = createSlice({
     },
     filterCategory: (state, action: PayloadAction<{ category: string }>) => {
       const filterDisabled = [];
+      const filterTypes: string[] = [];
       state.filterSettings.category = action.payload.category;
       if (state.filterSettings.category === FilterCategory.VIDEOCAMERA.data) {
         filterDisabled.push(FilterType.SNAPSHOT, FilterType.FILM);
         state.filterSettings.disabledType = filterDisabled;
+        if (state.filterSettings.type !== null) {
+          for (const iterator of state.filterSettings.type) {
+            if (!(state.filterSettings.disabledType.includes(iterator))) {
+              filterTypes.push(iterator);
+            }
+          }
+        }
+        state.filterSettings.type = filterTypes;
       } else {
         state.filterSettings.disabledType = null;
       }
+
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       const price = selectMinAndMaxPrice(state.filterCameras as TProduct[]);
       state.filterSettings.placeholderPrice = price;

@@ -31,7 +31,7 @@ export default function ReviewsList({ reviews }: TReviews) {
   };
 
   if (reviews === null) {
-    return;
+    return <span></span>;
   }
 
   const sortReviews = sortReviewsByDate(reviews);

@@ -21,11 +21,11 @@ export default function PromosCameras() {
   }, []);
 
   if (promo === undefined) {
-    return;
+    return <span></span>;
   }
 
   if (promos === null) {
-    return;
+    return <span></span>;
   }
 
   return (
