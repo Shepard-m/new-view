@@ -10,6 +10,7 @@ export const AppRoute = {
   CATALOG: '/',
   CAMERA: '/camera',
   NOT_FOUND: '*',
+  BASKET: '/card',
 };
 export const ApiRoute = {
   CAMERAS: '/cameras',
@@ -104,4 +105,68 @@ export const OptionUrl = {
   LEVEL_FILTER: 'levelFilter',
   TYPE_SORT: 'typeSort',
   DIRECTION_SORT: 'directionSort',
+  TABS_CAMERA: 'tab'
+};
+
+export const TypeButton = {
+  CARD: 'card',
+  CAMERA_PAGE: 'camera'
+};
+
+export const KeyLocalStorage = {
+  BASKET: 'basket',
+  COUNT_CAMERAS_BASKET: 'countCamerasBasket',
+  ID_COUNT: 'idCount',
+};
+
+export const BreadcrumbsName = {
+  BASKET: 'Корзина',
+};
+
+export const ArithmeticSigns = {
+  PLUS: '+',
+  SUBTRACTION: '-'
+};
+
+export const optionCountCamerasBasket = {
+  MAX: 9,
+  MIN: 1,
+};
+
+export const OptionDiscountOnCount = {
+  THREE_PERCENT: {
+    countCamera: 2,
+    percent: 3,
+  },
+  FIVE_PERCENT: {
+    countCamera: 5,
+    percent: 5,
+  },
+  TEN_PERCENT: {
+    countCamera: 10,
+    percent: 10,
+  },
+  FIFTEEN_PERCENT: {
+    countCamera: 10,
+    percent: 15,
+  },
+};
+
+export const OptionDiscountOnPrice = {
+  MINIMUM: {
+    price: 10000,
+    percent: 0,
+  },
+  MEDIUM: {
+    price: 20000,
+    percent: 1,
+  },
+  HIGH: {
+    price: 30000,
+    percent: 2,
+  },
+  MAXIMUM: {
+    price: 30000,
+    percent: 3,
+  },
 };

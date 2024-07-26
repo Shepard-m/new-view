@@ -1,20 +1,34 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { camerasSelectors } from '../../store/slice/catalog/catalog-selectros';
-import { AppRoute } from '../../const';
+import { AppRoute, KeyLocalStorage } from '../../const';
 import { ChangeEvent, useEffect, MouseEvent, useRef, useState, KeyboardEvent, SyntheticEvent, } from 'react';
 import { useAppSelector } from '../../types/indexStore';
 import { TProduct } from '../../types/product';
+import { getDataLocalStorage } from '../../utils/utils';
+import { countCamerasSelectors, countPromoCamerasSelectors } from '../../store/slice/basket/basket-selectors';
 
 export default function Header() {
   const cameras = useAppSelector(camerasSelectors);
+  const selector = useAppSelector;
   const formInput = useRef<HTMLInputElement>(null);
   const formLiElement = useRef<HTMLLIElement>(null);
   const formUlModal = useRef<HTMLUListElement>(null);
   const navigate = useNavigate();
+  const countPromoCameras = selector(countPromoCamerasSelectors);
+  const countCameras = selector(countCamerasSelectors);
+  const [countBasketCamera, setCountBasketCamera] = useState<number>(0);
   const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
   const [valueInput, setValueInput] = useState<string>('');
   const [listCamerasSearch, setListCamerasSearch] = useState<TProduct[]>([]);
   const [isListOpen, setIsListOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const totalBasketCameras = getDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET);
+    if (totalBasketCameras !== null && totalBasketCameras !== '') {
+      setCountBasketCamera(Number(totalBasketCameras));
+    }
+
+  }, [countPromoCameras, countCameras]);
 
   function onClearSearchCameras(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
@@ -132,14 +146,16 @@ export default function Header() {
             </span>
           </button>
         </div>
-        <a className="header__basket-link" href="#">
+        {countBasketCamera !== 0
+        &&
+        <Link className="header__basket-link"to={AppRoute.BASKET}>
           <svg width={16} height={16} aria-hidden="true">
             <use xlinkHref="#icon-basket" />
           </svg>
           <span className="header__basket-count">
-            3
+            {Number(countBasketCamera)}
           </span>
-        </a>
+        </Link>}
       </div>
     </header>
   );
