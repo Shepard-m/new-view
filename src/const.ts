@@ -18,6 +18,7 @@ export const ApiRoute = {
   PROMO: 'promo',
   SIMILAR: 'similar',
   ORDER: 'orders',
+  COUPONS: '/coupons',
 };
 
 export const RequestStatus = {
@@ -117,6 +118,7 @@ export const KeyLocalStorage = {
   BASKET: 'basket',
   COUNT_CAMERAS_BASKET: 'countCamerasBasket',
   ID_COUNT: 'idCount',
+  COUPON: 'coupon',
 };
 
 export const BreadcrumbsName = {
@@ -169,4 +171,9 @@ export const OptionDiscountOnPrice = {
     price: 30000,
     percent: 3,
   },
+};
+
+export const ValidCoupon = {
+  VALID: 'is-valid',
+  INVALID: 'is-invalid',
 };

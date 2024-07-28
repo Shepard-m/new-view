@@ -1,4 +1,4 @@
-import BasketItem from '../../components/basket-item/basket-item';
+import BasketItem from '../basket-item/basket-item';
 import { TProduct } from '../../types/product';
 
 type TBasketList = {

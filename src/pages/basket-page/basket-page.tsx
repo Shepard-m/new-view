@@ -2,7 +2,7 @@ import BreadcrumbsList from '../../components/breadcrumbs-list/breadcrumbs-list'
 import Container from '../../components/container/container';
 import { BreadcrumbsName, KeyLocalStorage } from '../../const';
 import { getDataLocalStorage } from '../../utils/utils';
-import BasketList from '../basket-list/basket-list';
+import BasketList from '../../components/basket-list/basket-list';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { camerasSelectors } from '../../store/slice/catalog/catalog-selectros';
 import { TProduct } from '../../types/product';

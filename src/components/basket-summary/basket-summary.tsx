@@ -9,6 +9,7 @@ import { clearValueToLocalStorage } from '../../utils/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../loader/loader';
+import { BasketPromoCode } from '../basket-promo-code/basket-promo-сode';
 
 export default function BasketSummary() {
   const selector = useAppSelector;
@@ -26,20 +27,17 @@ export default function BasketSummary() {
       dispatch(fetchPostOrder({camerasIds, coupon: null}))
         .unwrap()
         .then(() => {
+          const dataValueStorage = Object.values(KeyLocalStorage);
           setIsActiveModal(true);
-          clearValueToLocalStorage(KeyLocalStorage.BASKET);
-          clearValueToLocalStorage(KeyLocalStorage.ID_COUNT);
-          clearValueToLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET);
+          for (const value of dataValueStorage) {
+            clearValueToLocalStorage(value);
+          }
           dispatch(basketActions.clearBasket());
         })
         .catch(() => {
           toast.error(TextError.ORDER);
         });
     }
-  }
-
-  if (orderStatus === RequestStatus.LOADING) {
-    <Loader />;
   }
 
   function onCloseModalClick() {
@@ -61,20 +59,7 @@ export default function BasketSummary() {
     <>
       <div className="basket__summary">
         <div className="basket__promo">
-          {/*<p class="title title&#45;&#45;h4">Если у вас есть промокод на скидку, примените его в этом поле</p>
-            <div class="basket-form">
-              <form action="#">
-                <div class="custom-input">
-                  <label><span class="custom-input__label">Промокод</span>
-                    <input type="text" name="promo" placeholder="Введите промокод">
-                  </label>
-                  <p class="custom-input__error">Промокод неверный</p>
-                  <p class="custom-input__success">Промокод принят!</p>
-                </div>
-                <button class="btn" type="submit">Применить
-                </button>
-              </form>
-            </div>*/}
+          <BasketPromoCode />
         </div>
         <div className="basket__summary-order">
           <p className="basket__summary-item">

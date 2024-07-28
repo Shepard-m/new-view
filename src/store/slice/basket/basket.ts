@@ -1,34 +1,53 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import calculationDiscount, { getDataLocalStorage, saveDataLocalStorage } from '../../../utils/utils';
-import { ArithmeticSigns, KeyLocalStorage } from '../../../const';
+import { ArithmeticSigns, KeyLocalStorage, RequestStatus } from '../../../const';
 import { TProduct } from '../../../types/product';
 import { TPromo } from '../../../types/promo';
 import { TIdCount } from '../../../types/id-count';
+import { fetchPostCoupons } from '../../api-action';
 
 
 type TInitialState = {
+  statusBasket: string;
   listIdCamerasBasket: string | null;
   discountPrice: number;
   totalPrice: number;
   priceCamerasWithoutPromo: number;
   countCameras: number;
+  percentCoupon: number;
   countPromoCameras: number;
   promoProduct: TProduct[] | null;
   selectedPromoCameras: TProduct[] | null;
 }
 
 const initialState: TInitialState = {
+  statusBasket: RequestStatus.NONE,
   listIdCamerasBasket: null,
   discountPrice: 0,
   totalPrice: 0,
   priceCamerasWithoutPromo: 0,
   countCameras: 0,
+  percentCoupon: 0,
   countPromoCameras: 0,
   promoProduct: null,
   selectedPromoCameras: null,
 };
 
 const basketSlice = createSlice({
+  extraReducers(builder) {
+    builder
+      .addCase(fetchPostCoupons.pending, (state) => {
+        state.statusBasket = RequestStatus.LOADING;
+      })
+      .addCase(fetchPostCoupons.fulfilled, (state, action) => {
+        state.statusBasket = RequestStatus.SUCCESS;
+        state.percentCoupon = action.payload;
+      })
+      .addCase(fetchPostCoupons.rejected, (state) => {
+        state.statusBasket = RequestStatus.FAILED;
+        state.percentCoupon = 0;
+      });
+  },
   initialState,
   name: 'basket',
   reducers: {
@@ -45,7 +64,14 @@ const basketSlice = createSlice({
         const selectedPromoId: number[] = [];
         let copyCountPromo = 0;
         let copyCountPromoWithoutPromo = 0;
+        const dataCoupon = getDataLocalStorage(KeyLocalStorage.COUPON);
+        let coupon: TIdCount | null = null;
         const camerasIdBasket = state.listIdCamerasBasket.split(',').map(Number);
+
+        if (dataCoupon) {
+          coupon = (JSON.parse(dataCoupon) as TIdCount);
+          state.percentCoupon = Object.values(coupon).find((v) => v) as number;
+        }
 
         if (action.payload.listIdCount) {
           listSelectId = (Object.keys(action.payload.listIdCount)).map(Number);
@@ -98,7 +124,7 @@ const basketSlice = createSlice({
         }
 
         saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, state.countCameras + state.countPromoCameras);
-        state.discountPrice = calculationDiscount(state.countCameras, copyTotalPrice);
+        state.discountPrice = calculationDiscount(state.countCameras, copyTotalPrice, state.percentCoupon);
         state.totalPrice = copyTotalPrice + promoCamerasPrice;
         state.priceCamerasWithoutPromo = copyTotalPrice;
       }
@@ -144,7 +170,7 @@ const basketSlice = createSlice({
       saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, state.countCameras + state.countPromoCameras);
 
       roundedString = (copyTotalPrice).toFixed(2);
-      state.discountPrice = calculationDiscount(state.countCameras, copyPriceCamerasWithoutPromo);
+      state.discountPrice = calculationDiscount(state.countCameras, copyPriceCamerasWithoutPromo, state.percentCoupon);
       state.totalPrice = Number(roundedString);
       state.priceCamerasWithoutPromo = copyPriceCamerasWithoutPromo;
     },
@@ -168,14 +194,17 @@ const basketSlice = createSlice({
 
       state.countCameras -= action.payload.count;
       state.priceCamerasWithoutPromo -= action.payload.price;
-      state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo);
+      state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon);
     },
     clearBasket: (state) => {
+      state.statusBasket = RequestStatus.NONE;
       state.listIdCamerasBasket = null;
       state.discountPrice = 0;
       state.totalPrice = 0;
       state.priceCamerasWithoutPromo = 0;
       state.countCameras = 0;
+      state.percentCoupon = 0;
+      state.countPromoCameras = 0;
       state.promoProduct = null;
       state.selectedPromoCameras = null;
     }

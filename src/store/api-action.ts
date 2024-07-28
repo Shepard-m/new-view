@@ -54,3 +54,12 @@ export const fetchPostOrder = createAsyncThunk<void, TOrder, { extra: AxiosInsta
     await api.post(ApiRoute.ORDER, order);
   }
 );
+
+export const fetchPostCoupons = createAsyncThunk<number, string, { extra: AxiosInstance }>(
+  'fetchPostCoupons',
+  async (coupon, { extra: api }) => {
+    const { data } = await api.post<number>(ApiRoute.COUPONS, {coupon: coupon});
+
+    return data;
+  }
+);

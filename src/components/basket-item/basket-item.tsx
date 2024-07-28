@@ -40,10 +40,14 @@ export default function BasketItem({ camera }: TBasketItem) {
   }, []);
 
   function removeCamera() {
+    const countBasketCamera = getDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET);
     removeValueToLocalStorage(KeyLocalStorage.BASKET, camera.id);
     dispatch(basketActions.removeCameraBasket({ id: camera.id, count: countCamera, price: totalPrice}));
     const listIdCamerasBasket = getDataLocalStorage(KeyLocalStorage.BASKET);
     removeIdCount(camera.id);
+    if (countBasketCamera) {
+      saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, +countBasketCamera - countCamera);
+    }
     setIsModal(false);
     if (listIdCamerasBasket === '') {
       navigate(AppRoute.CATALOG);

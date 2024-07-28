@@ -3,8 +3,8 @@ import 'dayjs/locale/ru';
 import { TReview } from '../types/review';
 import { TProduct } from '../types/product';
 import { Price } from '../types/price';
-import { json, NavigateFunction } from 'react-router-dom';
-import { DirectionSorting, FilterCategory, KeyLocalStorage, OptionDiscountOnCount, OptionDiscountOnPrice, SettingSort, TypeButton, countCamerasForPage } from '../const';
+import { NavigateFunction } from 'react-router-dom';
+import { DirectionSorting, FilterCategory, KeyLocalStorage, OptionDiscountOnCount, OptionDiscountOnPrice, SettingSort, countCamerasForPage } from '../const';
 import { TIdCount } from '../types/id-count';
 
 dayjs.locale('ru');
@@ -250,11 +250,11 @@ export function removeValueToLocalStorage(key: string, value: number): void {
 }
 
 export function clearValueToLocalStorage(key: string): void {
-  localStorage.setItem(key, '');
+  localStorage.removeItem(key);
 }
 
-export default function calculationDiscount(countCamera: number, price: number) {
-  let discount = 0;
+export default function calculationDiscount(countCamera: number, price: number, percentCoupon: number) {
+  let discount = percentCoupon;
   let discountPrice = 0;
   let roundedString = '0';
 
@@ -318,9 +318,17 @@ export function removeIdCount(id: number) {
     return;
   }
   idCountCameras = JSON.parse(idCount) as TIdCount;
-  console.log(idCountCameras);
   delete idCountCameras[id];
   saveDataLocalStorage(KeyLocalStorage.ID_COUNT, idCountCameras)
-  console.log(idCountCameras);
 }
 
+export function validationOfCoupon(coupon: string) {
+  let validCoupon = '';
+  for (const iterator of coupon) {
+    if (iterator !== ' ') {
+      validCoupon += iterator;
+    }
+  }
+
+  return validCoupon;
+}
