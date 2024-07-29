@@ -92,6 +92,7 @@ export const TextError = {
   PHONE: 'некорректный телефон',
   SERVER: 'ошибка загрузки данных',
   ORDER: 'Произошла  ошибка в формление заказа',
+  REVIEW: 'Произошла ошибка отправки отзыва',
 };
 export const TextSuccess = {
   ORDER: 'Заказ добавлен в корзину',
@@ -176,4 +177,68 @@ export const OptionDiscountOnPrice = {
 export const ValidCoupon = {
   VALID: 'is-valid',
   INVALID: 'is-invalid',
+};
+
+export const OptionsStarReview = {
+  GREAT: {
+    value: 5,
+    text: 'Отлично'
+  },
+  GOOD: {
+    value: 4,
+    text: 'Хорошо'
+  },
+  NORMALLY: {
+    value: 3,
+    text: 'Нормально'
+  },
+  BADLY: {
+    value: 2,
+    text: 'Плохо'
+  },
+  TERRIBLY: {
+    value: 1,
+    text: 'Ужасно'
+  },
+};
+
+export const TextErrorValidationReview = {
+  RATING: {
+    required: 'Нужно оценить товар'
+  },
+  NAME: {
+    required: 'Нужно указать имя',
+    minLength: 'Минимальная длина имени 2 символа',
+    maxLength: 'Максимальная длина имени 15 символа',
+  },
+  PLUS: {
+    required: 'Нужно указать достоинства',
+    minLength: 'Минимальная длина 10 символа',
+    maxLength: 'Максимальная длина 160 символа',
+  },
+  MINUS: {
+    required: 'Нужно указать недостатки',
+    minLength: 'Минимальная длина 10 символа',
+    maxLength: 'Максимальная длина 160 символа',
+  },
+  COMMENT: {
+    required: 'Нужно добавить комментарий',
+    minLength: 'Минимальная длина 10 символа',
+    maxLength: 'Максимальная длина 160 символа',
+  }
+};
+
+export const OptionsValidationReview = {
+  NAME: {
+    minLength: 2,
+    maxLength: 15,
+  },
+  ADVANTAGES: {
+    minLength: 10,
+    maxLength: 160,
+  },
+  COMMENT: {
+    minLength: 10,
+    maxLength: 160,
+  },
 };

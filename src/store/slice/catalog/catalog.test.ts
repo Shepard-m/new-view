@@ -1,5 +1,5 @@
 import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
-import { mockProduct } from '../../../utils/moks';
+import { mockProduct } from '../../../utils/moсks';
 import { fetchCamerasProduct } from '../../api-action';
 import { catalogSlice } from './catalog';
 describe('Catalog Slice', () => {

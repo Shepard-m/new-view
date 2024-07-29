@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../../const';
-import { mockProduct } from '../../../utils/moks';
+import { mockProduct } from '../../../utils/moсks';
 import { similarSlice } from './similar';
 import { fetchGetSimilar } from '../../api-action';
 

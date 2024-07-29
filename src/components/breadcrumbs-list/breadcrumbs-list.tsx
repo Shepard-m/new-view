@@ -7,7 +7,7 @@ type TBreadcrumbsList = {
 
 export default function BreadcrumbsList({ name }: TBreadcrumbsList) {
   return (
-    <ul className="breadcrumbs__list">
+    <ul className="breadcrumbs__list" data-testid={'breadcrumbs-list'}>
       <li className="breadcrumbs__item">
         <Link className="breadcrumbs__link" to={AppRoute.CATALOG}>
           Главная

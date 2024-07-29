@@ -1,5 +1,5 @@
 import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
-import { mockPromos } from '../../../utils/moks';
+import { mockPromos } from '../../../utils/moсks';
 import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';
 import { orderSlice } from '../order/order';
@@ -7,6 +7,7 @@ import { reviewsSlice } from './reviews';
 import { similarSlice } from '../similar/similar';
 import { promosSlice } from '../promo/promo';
 import { reviewsSelectors, reviewsStatusSelectors } from './reviews-selectors';
+import { basketSlice } from '../basket/basket';
 
 describe('Order selectors', () => {
   const initialState = {
@@ -53,6 +54,18 @@ describe('Order selectors', () => {
       directionSorting: DirectionSorting.TOP.direction,
       typeSorting: SettingSort.price.type,
     },
+    [basketSlice.name]: {
+      statusBasket: RequestStatus.NONE,
+      listIdCamerasBasket: null,
+      discountPrice: 0,
+      totalPrice: 0,
+      priceCamerasWithoutPromo: 0,
+      countCameras: 0,
+      percentCoupon: 0,
+      countPromoCameras: 0,
+      promoProduct: null,
+      selectedPromoCameras: null,
+    }
   };
   it('should return reviews', () => {
     const { reviews } = initialState[reviewsSlice.name];

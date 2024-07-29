@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
 import PromosCameras from './promos-cameras';
 import { promosSlice } from '../../store/slice/promo/promo';
-import { mockPromos } from '../../utils/moks';
+import { mockPromos } from '../../utils/moсks';
 import { RequestStatus } from '../../const';
 import { cameraSlice } from '../../store/slice/camera/camera';
 import { catalogSlice } from '../../store/slice/catalog/catalog';

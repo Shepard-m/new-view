@@ -7,7 +7,7 @@ type TBasketList = {
 
 export default function BasketList({ cameras }: TBasketList) {
   return (
-    <ul className="basket__list">
+    <ul className="basket__list" data-testid={'basket-list'}>
       {cameras.map((camera) => <BasketItem key={camera.id} camera={camera}/>)}
     </ul>
   );

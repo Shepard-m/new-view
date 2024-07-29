@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
-import { mockProduct } from '../../utils/moks';
+import { mockProduct } from '../../utils/moсks';
 import SimilarList from './similar-list';
 
 describe('similar-list', () => {

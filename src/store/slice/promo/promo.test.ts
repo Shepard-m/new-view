@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../../const';
-import { mockPromos } from '../../../utils/moks';
+import { mockPromos } from '../../../utils/moсks';
 import { fetchGetPromos } from '../../api-action';
 import { TInitialState, promosActions, promosSlice } from './promo';
 

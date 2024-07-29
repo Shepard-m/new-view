@@ -4,7 +4,7 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { cameraSelectors } from '../../store/slice/camera/cameraSelectors';
 import { fetchGetCamera, fetchGetPromos, fetchGetReviews, fetchGetSimilar } from '../../store/api-action';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { reviewsSelectors } from '../../store/slice/reviews/reviews-selectors';
 import ProductInfo from '../../components/product-info/product-info';
 import { AppRoute, OptionsStars, TypeButton } from '../../const';
@@ -14,6 +14,7 @@ import ListStars from '../../components/list-stars/list-stars';
 import { Helmet } from 'react-helmet-async';
 import ButtonAddBasket from '../../components/button-add-basket/button-add-basket';
 import BreadcrumbsList from '../../components/breadcrumbs-list/breadcrumbs-list';
+import { ButtonAddReview } from '../../components/button-add-review/button-add-review';
 
 export default function CameraPage() {
   const dispatch = useAppDispatch();
@@ -89,6 +90,7 @@ export default function CameraPage() {
                 <div className="container">
                   <div className="page-content__headed">
                     <h2 className="title title--h3">Отзывы</h2>
+                    <ButtonAddReview cameraId={camera.id} />
                   </div>
                   <ReviewsList reviews={reviews} />
                 </div>

@@ -196,6 +196,10 @@ const basketSlice = createSlice({
       state.priceCamerasWithoutPromo -= action.payload.price;
       state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon);
     },
+    applicationCoupon: (state, action: PayloadAction<{ percent: number }>) => {
+      state.percentCoupon = action.payload.percent;
+      state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon);
+    },
     clearBasket: (state) => {
       state.statusBasket = RequestStatus.NONE;
       state.listIdCamerasBasket = null;

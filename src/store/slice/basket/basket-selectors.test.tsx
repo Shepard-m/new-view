@@ -4,12 +4,12 @@ import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';
 import { orderSlice } from '../order/order';
 import { reviewsSlice } from '../reviews/reviews';
-import { similarSlice } from './similar';
+import { similarSlice } from '../similar/similar';
 import { promosSlice } from '../promo/promo';
-import { similarSelectors, similarStatusSelectors } from './similarSelectors';
-import { basketSlice } from '../basket/basket';
+import { basketSlice } from './basket';
+import { discountPriceSelectors, percentCouponSelectors } from './basket-selectors';
 
-describe('Order selectors', () => {
+describe('Basket selectors', () => {
   const initialState = {
     [promosSlice.name]: {
       promos: mockPromos,
@@ -67,18 +67,18 @@ describe('Order selectors', () => {
       selectedPromoCameras: null,
     }
   };
-  it('should return similar', () => {
-    const { similar } = initialState[similarSlice.name];
+  it('should return percentCoupon', () => {
+    const { percentCoupon } = initialState[basketSlice.name];
 
-    const result = similarSelectors(initialState);
+    const result = percentCouponSelectors(initialState);
 
-    expect(result).toEqual(similar);
+    expect(result).toEqual(percentCoupon);
   });
-  it('should return similarStatus', () => {
-    const { similarStatus } = initialState[similarSlice.name];
+  it('should return discountPrice', () => {
+    const { discountPrice } = initialState[basketSlice.name];
 
-    const result = similarStatusSelectors(initialState);
+    const result = discountPriceSelectors(initialState);
 
-    expect(result).toEqual(similarStatus);
+    expect(result).toEqual(discountPrice);
   });
 });

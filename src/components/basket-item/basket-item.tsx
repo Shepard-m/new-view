@@ -5,7 +5,7 @@ import { TProduct } from '../../types/product';
 import { AppRoute, ArithmeticSigns , KeyLocalStorage, optionCountCamerasBasket, RequestStatus } from '../../const';
 import { Link, useNavigate } from 'react-router-dom';
 import { orderStatusSelectors } from '../../store/slice/order/ordersSelectors';
-import { createListIdCount, getDataLocalStorage, removeIdCount, removeValueToLocalStorage, saveDataLocalStorage } from '../../utils/utils';
+import { clearValueToLocalStorage, createListIdCount, getDataLocalStorage, removeIdCount, removeValueToLocalStorage, saveDataLocalStorage } from '../../utils/utils';
 import { TIdCount } from '../../types/id-count';
 
 type TBasketItem = {
@@ -49,8 +49,10 @@ export default function BasketItem({ camera }: TBasketItem) {
       saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, +countBasketCamera - countCamera);
     }
     setIsModal(false);
-    if (listIdCamerasBasket === '') {
+    if (listIdCamerasBasket === null) {
       navigate(AppRoute.CATALOG);
+      clearValueToLocalStorage(KeyLocalStorage.COUPON);
+      dispatch(basketActions.clearBasket);
     }
   }
 
@@ -110,7 +112,7 @@ export default function BasketItem({ camera }: TBasketItem) {
 
   return (
     <>
-      <li className="basket-item">
+      <li className="basket-item" data-testid={'basket-item'}>
         <div className="basket-item__img">
           <picture>
             <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />

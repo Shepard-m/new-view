@@ -1,4 +1,4 @@
-import { mockProduct } from '../../utils/moks';
+import { mockProduct } from '../../utils/moсks';
 import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
 import CatalogProducts from './catalog-products';

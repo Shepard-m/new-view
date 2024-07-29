@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
 import ProductCard from './product-card';
-import { mockProduct } from '../../utils/moks';
+import { mockProduct } from '../../utils/moсks';
 
 describe('product-card', () => {
   it('should return a component product-card without class is-active', () => {

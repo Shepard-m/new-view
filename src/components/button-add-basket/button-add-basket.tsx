@@ -109,7 +109,7 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
         ?
         <ButtonCard listCardInBasket={listCardInBasket} camera={camera} typeButton={typeButton} onOpenModalBuyClick={onOpenModalBuyClick}/>
         :
-        <button className="btn btn--purple" type="button" onClick={onOpenModalBuyClick}>
+        <button className="btn btn--purple" type="button" onClick={onOpenModalBuyClick} data-testid={'button-add-basket'}>
           <svg width={24} height={16} aria-hidden="true">
             <use xlinkHref='#icon-add-basket' />
           </svg>
@@ -117,7 +117,7 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
         </button>}
       {isActiveModal
         &&
-        <div className={`modal ${isActiveModal ? 'is-active' : ''}`} >
+        <div className={`modal ${isActiveModal ? 'is-active' : ''}`}>
           <div className="modal__wrapper">
             <div className="modal__overlay" ref={modalOverlay} />
             <div className="modal__content" ref={modalContentRef}>
@@ -144,8 +144,7 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
                 </div>
               </div>
               <div className="modal__buttons">
-                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={onAddBasketSubmit}
-                >
+                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={onAddBasketSubmit}>
                   <svg width={24} height={16} aria-hidden="true">
                     <use xlinkHref="#icon-add-basket" />
                   </svg>

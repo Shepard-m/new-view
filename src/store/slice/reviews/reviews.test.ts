@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../../const';
-import { mockReviews } from '../../../utils/moks';
+import { mockReviews } from '../../../utils/moсks';
 import { TInitialState, reviewsSlice } from './reviews';
 import { fetchGetReviews } from '../../api-action';
 

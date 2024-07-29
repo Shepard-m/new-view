@@ -9,7 +9,7 @@ import { orderSlice } from '../../store/slice/order/order';
 import { promosSlice } from '../../store/slice/promo/promo';
 import { reviewsSlice } from '../../store/slice/reviews/reviews';
 import { similarSlice } from '../../store/slice/similar/similar';
-import { mockProduct, mockPromos } from '../../utils/moks';
+import { mockProduct, mockPromos } from '../../utils/moсks';
 
 describe('camera-page', () => {
   it('should return a component camera-page', () => {

@@ -241,11 +241,14 @@ export function removeValueToLocalStorage(key: string, value: number): void {
   }
 
   listId = dataKey.split(',').map(Number);
-
   if (listId.includes(value)) {
     dataKey = listId.filter((id) => id !== value).toString();
   }
 
+  if (dataKey === '') {
+    localStorage.removeItem(key);
+    return;
+  }
   localStorage.setItem(key, dataKey);
 }
 
@@ -310,6 +313,7 @@ export function createListIdCount(id: number, count: number) {
   idCountCameras[id] = count;
   saveDataLocalStorage(KeyLocalStorage.ID_COUNT, idCountCameras);
 }
+
 export function removeIdCount(id: number) {
   const idCount = getDataLocalStorage(KeyLocalStorage.ID_COUNT);
   let idCountCameras: TIdCount | null = null;
@@ -319,7 +323,11 @@ export function removeIdCount(id: number) {
   }
   idCountCameras = JSON.parse(idCount) as TIdCount;
   delete idCountCameras[id];
-  saveDataLocalStorage(KeyLocalStorage.ID_COUNT, idCountCameras)
+  if (Object.keys(idCountCameras).length === 0) {
+    localStorage.removeItem(KeyLocalStorage.ID_COUNT);
+    return;
+  }
+  saveDataLocalStorage(KeyLocalStorage.ID_COUNT, idCountCameras);
 }
 
 export function validationOfCoupon(coupon: string) {

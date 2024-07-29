@@ -6,6 +6,7 @@ import { KeyLocalStorage, RequestStatus, ValidCoupon } from '../../const';
 import Loader from '../loader/loader';
 import { orderStatusSelectors } from '../../store/slice/order/ordersSelectors';
 import { clearValueToLocalStorage, getDataLocalStorage, saveDataLocalStorage, validationOfCoupon } from '../../utils/utils';
+import { basketActions } from '../../store/slice/basket/basket';
 
 export function BasketPromoCode() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ export function BasketPromoCode() {
     if (percentCoupon !== 0) {
       saveDataLocalStorage(KeyLocalStorage.COUPON, {[coupon]: percentCoupon});
     }
+
+    dispatch(basketActions.applicationCoupon({percent: percentCoupon}));
   }, [percentCoupon]);
 
   function onSendCouponClick(evt: SyntheticEvent<HTMLFormElement>) {
@@ -48,12 +51,13 @@ export function BasketPromoCode() {
   function onInputCouponChange(evt: SyntheticEvent<HTMLInputElement>) {
     const copyCoupon = validationOfCoupon(evt.currentTarget.value);
     setCoupon(copyCoupon);
+    setValidCoupon('');
   }
 
 
   return (
     <>
-      <p className="title title--h4">Если у вас есть промокод на скидку, примените его в этом поле</p>
+      <p className="title title--h4" data-testid={'basket-promo-code'}>Если у вас есть промокод на скидку, примените его в этом поле</p>
       <div className="basket-form">
         <form action='#' onSubmit={onSendCouponClick}>
           <div className={`custom-input ${validCoupon}`}>

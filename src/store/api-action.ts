@@ -5,6 +5,7 @@ import { ApiRoute } from '../const';
 import { TReview } from '../types/review';
 import { TPromo } from '../types/promo';
 import { TOrder } from '../types/order';
+import { TAddReview } from '../types/add-review';
 
 export const fetchCamerasProduct = createAsyncThunk<TProduct[], undefined, { extra: AxiosInstance }>(
   'data/fetchCamerasProduct',
@@ -61,5 +62,12 @@ export const fetchPostCoupons = createAsyncThunk<number, string, { extra: AxiosI
     const { data } = await api.post<number>(ApiRoute.COUPONS, {coupon: coupon});
 
     return data;
+  }
+);
+
+export const fetchPostReview = createAsyncThunk<void, TAddReview, { extra: AxiosInstance }>(
+  'fetchPostReview',
+  async (order, { extra: api }) => {
+    await api.post(ApiRoute.REVIEWS, order);
   }
 );

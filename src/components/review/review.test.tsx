@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
 import Review from './review';
-import { mockReviews } from '../../utils/moks';
+import { mockReviews } from '../../utils/moсks';
 
 describe('review', () => {
   it('should return a component review', () => {

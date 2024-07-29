@@ -57,7 +57,7 @@ export default function BasketSummary() {
 
   return (
     <>
-      <div className="basket__summary">
+      <div className="basket__summary" data-testid={'basket-summary'}>
         <div className="basket__promo">
           <BasketPromoCode />
         </div>

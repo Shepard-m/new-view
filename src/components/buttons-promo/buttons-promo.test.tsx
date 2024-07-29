@@ -1,4 +1,4 @@
-import { mockPromos } from '../../utils/moks';
+import { mockPromos } from '../../utils/moсks';
 import { screen } from '@testing-library/react';
 import ButtonsPromo from './buttons-promo';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';

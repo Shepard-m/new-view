@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from '../../utils/mocks-component';
 import ListStars from './list-stars';
-import { mockProduct } from '../../utils/moks';
+import { mockProduct } from '../../utils/moсks';
 import { OptionsStars } from '../../const';
 
 describe('list-stars', () => {

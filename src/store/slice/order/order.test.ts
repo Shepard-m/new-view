@@ -20,7 +20,7 @@ describe('Order Slice', () => {
       orderStatus: RequestStatus.SUCCESS,
     };
 
-    const result = orderSlice.reducer(initialState, fetchPostOrder.fulfilled(undefined, '', { camerasIds: [1], coupon: null, tel: '89275559394' }));
+    const result = orderSlice.reducer(initialState, fetchPostOrder.fulfilled(undefined, '', { camerasIds: [1], coupon: null }));
 
     expect(result).toEqual(expectedState);
   });

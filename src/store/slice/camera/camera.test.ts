@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../../const';
-import { mockProduct } from '../../../utils/moks';
+import { mockProduct } from '../../../utils/moсks';
 import { fetchGetCamera } from '../../api-action';
 import { cameraSlice } from './camera';
 describe('Camera Slice', () => {

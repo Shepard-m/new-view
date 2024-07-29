@@ -1,5 +1,6 @@
 import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
-import { mockPromos } from '../../../utils/moks';
+import { mockPromos } from '../../../utils/moсks';
+import { basketSlice } from '../basket/basket';
 import { cameraSlice } from '../camera/camera';
 import { catalogSlice } from '../catalog/catalog';
 import { orderSlice } from '../order/order';
@@ -53,6 +54,18 @@ describe('Promo selectors', () => {
       directionSorting: DirectionSorting.TOP.direction,
       typeSorting: SettingSort.price.type,
     },
+    [basketSlice.name]: {
+      statusBasket: RequestStatus.NONE,
+      listIdCamerasBasket: null,
+      discountPrice: 0,
+      totalPrice: 0,
+      priceCamerasWithoutPromo: 0,
+      countCameras: 0,
+      percentCoupon: 0,
+      countPromoCameras: 0,
+      promoProduct: null,
+      selectedPromoCameras: null,
+    }
   };
   it('should return promos', () => {
     const { promos } = initialState[promosSlice.name];

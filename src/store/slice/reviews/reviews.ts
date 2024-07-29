@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchGetReviews } from '../../api-action';
+import { fetchGetReviews, fetchPostReview } from '../../api-action';
 import { RequestStatus } from '../../../const';
 import { TReview } from '../../../types/review';
 
@@ -24,6 +24,15 @@ const reviewsSlice = createSlice({
         state.reviews = action.payload;
       })
       .addCase(fetchGetReviews.rejected, (state) => {
+        state.reviewsStatus = RequestStatus.FAILED;
+      })
+      .addCase(fetchPostReview.pending, (state) => {
+        state.reviewsStatus = RequestStatus.LOADING;
+      })
+      .addCase(fetchPostReview.fulfilled, (state) => {
+        state.reviewsStatus = RequestStatus.SUCCESS;
+      })
+      .addCase(fetchPostReview.rejected, (state) => {
         state.reviewsStatus = RequestStatus.FAILED;
       });
   },
