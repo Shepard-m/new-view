@@ -55,7 +55,8 @@ const catalogSlice = createSlice({
         state.filterSettings.placeholderPrice.from = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[0].price;
         state.filterSettings.placeholderPrice.to = sortingCameras(state.cameras, state.typeSorting, state.directionSorting)[state.filterCameras.length - 1].price;
         state.filterCameras = filterCatalog(action.payload, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, SettingSort.price.type, DirectionSorting.DOWN.direction);
+        state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       })
       .addCase(fetchCamerasProduct.rejected, (state) => {
         state.statusCameras = RequestStatus.FAILED;
@@ -66,21 +67,26 @@ const catalogSlice = createSlice({
   reducers: {
     filterCameras: (state) => {
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
-      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras as TProduct[], state.currentPage, state.typeSorting, state.directionSorting);
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
+      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras as TProduct[], state.currentPage);
     },
     sortingByDirection: (state, action: PayloadAction<{ direction: string | null }>) => {
       if (action.payload.direction !== null) {
         state.directionSorting = action.payload.direction;
       }
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras as TProduct[], state.currentPage);
       }
     },
     sortingByType: (state, action: PayloadAction<{ type: string | null }>) => {
       if (action.payload.type !== null) {
         state.typeSorting = action.payload.type;
       }
-      state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+      if (state.filterCameras !== null) {
+        state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras as TProduct[], state.currentPage);
+      }
     },
     filterPrice: (state, action: PayloadAction<{ from: number; to: number }>) => {
       const initialPrices = state.cameras?.map((element) => element.price);
@@ -121,9 +127,10 @@ const catalogSlice = createSlice({
         state.filterSettings.placeholderPrice.to = maxPrice;
       }
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
       state.currentPage = 1;
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
     },
     filterType: (state, action: PayloadAction<{ type: string }>) => {
@@ -143,9 +150,10 @@ const catalogSlice = createSlice({
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       const price = selectMinAndMaxPrice(state.filterCameras as TProduct[]);
       state.filterSettings.placeholderPrice = price;
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
       state.currentPage = 1;
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
     },
     filterLevel: (state, action: PayloadAction<{ level: string }>) => {
@@ -166,8 +174,9 @@ const catalogSlice = createSlice({
       const price = selectMinAndMaxPrice(state.filterCameras as TProduct[]);
       state.filterSettings.placeholderPrice = price;
       state.currentPage = 1;
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
     },
     filterCategory: (state, action: PayloadAction<{ category: string }>) => {
@@ -193,8 +202,9 @@ const catalogSlice = createSlice({
       const price = selectMinAndMaxPrice(state.filterCameras as TProduct[]);
       state.filterSettings.placeholderPrice = price;
       state.currentPage = 1;
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
     },
     clearFilter: (state) => {
@@ -217,18 +227,23 @@ const catalogSlice = createSlice({
       };
       state.filterCameras = filterCatalog(state.cameras, state.filterSettings.category, state.filterSettings.price, state.filterSettings.type, state.filterSettings.level, state.filterSettings.disabledType);
       state.currentPage = 1;
+      state.filterCameras = sortingCameras(state.filterCameras, state.typeSorting, state.directionSorting);
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
+    },
+    clearSorting: (state) => {
+      state.typeSorting = SettingSort.price.type;
+      state.directionSorting = DirectionSorting.TOP.direction;
     },
     selectPage: (state, action: PayloadAction<{ page: number }>) => {
       state.currentPage = action.payload.page;
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
 
       if (state.filterCameras !== null) {
-        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage, state.typeSorting, state.directionSorting);
+        state.sliceCamerasByPage = selectCamerasByPage(state.filterCameras, state.currentPage);
       }
     }
   },

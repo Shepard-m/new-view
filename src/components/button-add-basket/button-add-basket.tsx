@@ -121,7 +121,7 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
           <div className="modal__wrapper">
             <div className="modal__overlay" ref={modalOverlay} />
             <div className="modal__content" ref={modalContentRef}>
-              <p className="title title--h4">Свяжитесь со мной</p>
+              <p className="title title--h4">Добавить товар в корзину</p>
               <div className="basket-item basket-item--short">
                 <div className="basket-item__img">
                   <picture>

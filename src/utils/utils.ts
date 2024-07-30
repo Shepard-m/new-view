@@ -134,38 +134,14 @@ export function debounce<T extends (...args: Parameters<T>) => void>(func: T, de
   };
 }
 
-export function selectCamerasByPage(cameras: TProduct[] | null, page: number, typeSort: string, direction: string) {
+export function selectCamerasByPage(cameras: TProduct[] | null, page: number) {
   if (cameras === null) {
     return [];
   }
   const from = countCamerasForPage * page - countCamerasForPage;
   const to = countCamerasForPage * page;
   const sliceCameras: TProduct[] = cameras.slice(from, to);
-  if (typeSort === SettingSort.price.type) {
-    switch (direction) {
-      case DirectionSorting.TOP.direction:
-        sliceCameras.sort((a: TProduct, b: TProduct) => a.price - b.price);
-        break;
-      case DirectionSorting.DOWN.direction:
-        sliceCameras.sort((a: TProduct, b: TProduct) => b.price - a.price);
-        break;
-      default:
-        sliceCameras.sort((a: TProduct, b: TProduct) => a.price - b.price);
-    }
-  }
 
-  if (typeSort === SettingSort.popularity.type) {
-    switch (direction) {
-      case DirectionSorting.TOP.direction:
-        sliceCameras.sort((a: TProduct, b: TProduct) => a.rating - b.rating);
-        break;
-      case DirectionSorting.DOWN.direction:
-        sliceCameras.sort((a: TProduct, b: TProduct) => b.rating - a.rating);
-        break;
-      default:
-        sliceCameras.sort((a: TProduct, b: TProduct) => a.rating - b.rating);
-    }
-  }
   return sliceCameras;
 }
 

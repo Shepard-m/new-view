@@ -1,13 +1,14 @@
-import { SyntheticEvent, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { StarReviews } from '../star-reviews/star-reviews';
 import { TAddReview } from '../../types/add-review';
 import { useForm } from 'react-hook-form';
-import { AppRoute, OptionsValidationReview, TextError, TextErrorValidationReview } from '../../const';
+import { AppRoute, OptionsValidationReview, RequestStatus, scrollLock, TextError, TextErrorValidationReview } from '../../const';
 import { TValidationFormReview } from '../../types/validationFormReview';
-import { useAppDispatch } from '../../types/indexStore';
+import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { fetchGetReviews, fetchPostReview } from '../../store/api-action';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { reviewsStatusSelectors } from '../../store/slice/reviews/reviews-selectors';
 
 type TButtonAddReview = {
   cameraId: number;
@@ -15,11 +16,14 @@ type TButtonAddReview = {
 
 export function ButtonAddReview({ cameraId }: TButtonAddReview) {
   const dispatch = useAppDispatch();
+  const selector = useAppSelector;
   const formReview = useRef<HTMLFormElement | null>(null);
+  const reviewsStatus = selector(reviewsStatusSelectors);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<TValidationFormReview>();
   const [isModal, setIsModal] = useState(false);
   const [isRating, setIsRating] = useState(false);
   const [isModalSuccess, setIsModalSuccess] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
   const [review, setReview] = useState<TAddReview>({
     cameraId: cameraId,
     userName: '',
@@ -28,6 +32,46 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
     review: '',
     rating: 0,
   });
+
+  const handleTabKey = (evt: KeyboardEvent) => {
+    if (evt.key === 'Tab' && modalContentRef.current) {
+      const focusableElements = modalContentRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      if (evt.shiftKey) {
+        if (document.activeElement === firstElement) {
+          evt.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          evt.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  };
+
+  function onCloseModalKeyDown(evt: KeyboardEvent) {
+    if (evt.key === 'Escape') {
+      setIsModal(false);
+    }
+  }
+
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (isModal) {
+      body?.classList.add(scrollLock);
+      document.addEventListener('keydown', onCloseModalKeyDown);
+      document.addEventListener('keydown', handleTabKey);
+    } else {
+      body?.classList.remove(scrollLock);
+      document.removeEventListener('keydown', onCloseModalKeyDown);
+      document.removeEventListener('keydown', handleTabKey);
+    }
+  }, [isModal]);
 
   function handelSelectStarClick(star: number) {
     setReview({...review, rating: star});
@@ -74,6 +118,10 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
   }
 
   function onSendReviewSubmit() {
+    if (review.rating === 0) {
+      setIsRating(true);
+      return;
+    }
     dispatch(fetchPostReview(review))
       .unwrap()
       .then(() => {
@@ -106,16 +154,13 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
       </button>
       {isModal
       &&
-      <div className="modal is-active">
+      <div className="modal is-active" >
         <div className="modal__wrapper">
           <div className="modal__overlay" />
-          <div className="modal__content">
+          <div className="modal__content" ref={modalContentRef} >
             <p className="title title--h4">Оставить отзыв</p>
             <div className="form-review">
               <form ref={formReview} method="post" onSubmit={(event) => {
-                if (review.rating === 0) {
-                  setIsRating(true);
-                }
                 void handleSubmit(onSendReviewSubmit)(event);
               }}
               >
@@ -162,6 +207,7 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
                           value: OptionsValidationReview.NAME.maxLength
                         },
                         onChange: onInputNameChange,
+                        disabled: reviewsStatus === RequestStatus.LOADING
                       })} required
                       />
                     </label>
@@ -185,7 +231,8 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
                           message: TextErrorValidationReview.PLUS.maxLength,
                           value: OptionsValidationReview.ADVANTAGES.maxLength
                         },
-                        onChange: onInputPlusChange
+                        onChange: onInputPlusChange,
+                        disabled: reviewsStatus === RequestStatus.LOADING
                       })}
                       />
                     </label>
@@ -209,7 +256,8 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
                           message: TextErrorValidationReview.MINUS.maxLength,
                           value: OptionsValidationReview.ADVANTAGES.maxLength
                         },
-                        onChange: onInputMinusChange
+                        onChange: onInputMinusChange,
+                        disabled: reviewsStatus === RequestStatus.LOADING
                       })}
                       />
                     </label>
@@ -233,7 +281,8 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
                           message: TextErrorValidationReview.COMMENT.maxLength,
                           value: OptionsValidationReview.COMMENT.maxLength
                         },
-                        onChange: onInputCommentChange
+                        onChange: onInputCommentChange,
+                        disabled: reviewsStatus === RequestStatus.LOADING
                       })}
                       />
                     </label>
@@ -241,10 +290,10 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
                       <p className='custom-input__error is-invalid'>{errors['user-comment'].message}</p>}
                   </div>
                 </div>
-                <button className="btn btn--purple form-review__btn" type="submit">Отправить отзыв</button>
+                <button className="btn btn--purple form-review__btn" type="submit" disabled={reviewsStatus === RequestStatus.LOADING}>Отправить отзыв</button>
               </form>
             </div>
-            <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={onCloseReviewClick}>
+            <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={onCloseReviewClick} disabled={reviewsStatus === RequestStatus.LOADING}>
               <svg width={10} height={10} aria-hidden="true">
                 <use xlinkHref="#icon-close" />
               </svg>

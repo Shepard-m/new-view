@@ -52,7 +52,7 @@ export default function BasketPage() {
 
   return(
     <Container>
-      <div className="page-content">
+      <div className="page-content" data-testid={'basket-page'}>
         <div className="breadcrumbs">
           <div className="container">
             <BreadcrumbsList name={BreadcrumbsName.BASKET}/>

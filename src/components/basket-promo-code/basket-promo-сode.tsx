@@ -28,7 +28,7 @@ export function BasketPromoCode() {
   }, []);
 
   useEffect(() => {
-    if (percentCoupon !== 0) {
+    if (percentCoupon !== 0 && coupon !== '') {
       saveDataLocalStorage(KeyLocalStorage.COUPON, {[coupon]: percentCoupon});
     }
 
@@ -53,7 +53,6 @@ export function BasketPromoCode() {
     setCoupon(copyCoupon);
     setValidCoupon('');
   }
-
 
   return (
     <>

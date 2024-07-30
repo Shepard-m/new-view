@@ -5,11 +5,12 @@ import { discountPriceSelectors, listIdCamerasBasketSelectors, totalPriceSelecto
 import { orderStatusSelectors } from '../../store/slice/order/ordersSelectors';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { basketActions } from '../../store/slice/basket/basket';
-import { clearValueToLocalStorage } from '../../utils/utils';
+import { clearValueToLocalStorage, getDataLocalStorage } from '../../utils/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../loader/loader';
 import { BasketPromoCode } from '../basket-promo-code/basket-promo-сode';
+import { TIdCount } from '../../types/id-count';
 
 export default function BasketSummary() {
   const selector = useAppSelector;
@@ -22,9 +23,14 @@ export default function BasketSummary() {
   const discountPrice = selector(discountPriceSelectors);
 
   function onSendOrderClick() {
+    const promoCode = getDataLocalStorage(KeyLocalStorage.COUPON);
+    let coupon = null;
+    if (promoCode) {
+      coupon = Object.keys((JSON.parse(promoCode) as TIdCount))[0];
+    }
     if (listIdCamerasBasket) {
       const camerasIds = listIdCamerasBasket.split(',').map(Number);
-      dispatch(fetchPostOrder({camerasIds, coupon: null}))
+      dispatch(fetchPostOrder({camerasIds, coupon}))
         .unwrap()
         .then(() => {
           const dataValueStorage = Object.values(KeyLocalStorage);
@@ -103,7 +109,8 @@ export default function BasketSummary() {
               <use xlinkHref="#icon-review-success" />
             </svg>
             <div className="modal__buttons">
-              <Link className="btn btn--purple modal__btn modal__btn--fit-width" type="button" to={AppRoute.CATALOG}>Вернуться к покупкам
+              <Link className="btn btn--purple modal__btn modal__btn--fit-width" type="button" to={AppRoute.CATALOG}>
+                Вернуться к покупкам
               </Link>
             </div>
             <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={onCloseModalClick}>

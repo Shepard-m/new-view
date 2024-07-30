@@ -1,7 +1,7 @@
 import { Fragment, SyntheticEvent } from 'react';
 import { OptionsStarReview, RequestStatus } from '../../const';
 import { useAppSelector } from '../../types/indexStore';
-import { statusBasketSelectors } from '../../store/slice/basket/basket-selectors';
+import { reviewsStatusSelectors } from '../../store/slice/reviews/reviews-selectors';
 
 type TStarReviews = {
   handelSelectStarClick: (star: number) => void;
@@ -9,7 +9,7 @@ type TStarReviews = {
 
 export function StarReviews({ handelSelectStarClick }: TStarReviews) {
   const selector = useAppSelector;
-  const statusBasket = selector(statusBasketSelectors);
+  const reviewsStatus = selector(reviewsStatusSelectors);
   const listOptionStars = Object.values(OptionsStarReview);
 
   function onSelectStarClick(evt: SyntheticEvent<HTMLInputElement>) {
@@ -21,7 +21,7 @@ export function StarReviews({ handelSelectStarClick }: TStarReviews) {
       {listOptionStars.map((star) =>
         (
           <Fragment key={star.text}>
-            <input key={star.value} className="visually-hidden" id={`star-${star.value}`} name="rate" type="radio" defaultValue={star.value} onClick={onSelectStarClick} disabled={statusBasket === RequestStatus.LOADING}/>
+            <input key={star.value} className="visually-hidden" id={`star-${star.value}`} name={`rate-${star.value}`} type="radio" defaultValue={star.value} onClick={onSelectStarClick} disabled={reviewsStatus === RequestStatus.LOADING}/>
             <label className="rate__label" htmlFor={`star-${star.value}`} title={star.text} />
           </Fragment>
         )

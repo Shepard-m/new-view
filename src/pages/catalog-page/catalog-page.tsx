@@ -12,6 +12,7 @@ import { FilterCatalog } from '../../components/filter/filter-catalog';
 import { filterCamerasSelectors, sliceCamerasByPageSelectors } from '../../store/slice/catalog/catalog-selectros';
 import CatalogSort from '../../components/catalog-sort/catalog-sort';
 import Pagination from '../../components/pagination/pagination';
+import { catalogActions } from '../../store/slice/catalog/catalog';
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
@@ -25,6 +26,10 @@ export default function CatalogPage() {
         toast.error(TextError.SERVER);
         setServerError(true);
       });
+    return () => {
+      dispatch(catalogActions.clearSorting());
+      dispatch(catalogActions.clearFilter());
+    };
   }, []);
 
   return (
