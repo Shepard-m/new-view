@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AppRoute, KeyLocalStorage, RequestStatus, scrollLock, TextError } from '../../const';
 import { fetchPostOrder } from '../../store/api-action';
-import { discountPriceSelectors, listIdCamerasBasketSelectors, totalPriceSelectors } from '../../store/slice/basket/basket-selectors';
+import { discountPriceSelectors, listIdCamerasBasketSelectors, statusBasketSelectors, totalPriceSelectors } from '../../store/slice/basket/basket-selectors';
 import { orderStatusSelectors } from '../../store/slice/order/ordersSelectors';
 import { useAppDispatch, useAppSelector } from '../../types/indexStore';
 import { basketActions } from '../../store/slice/basket/basket';
@@ -19,6 +19,7 @@ export default function BasketSummary() {
   const totalPrice = selector(totalPriceSelectors);
   const navigate = useNavigate();
   const orderStatus = selector(orderStatusSelectors);
+  const statusBasket = selector(statusBasketSelectors);
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const discountPrice = selector(discountPriceSelectors);
 
@@ -92,7 +93,7 @@ export default function BasketSummary() {
               {totalPrice - discountPrice} ₽
             </span>
           </p>
-          <button className="btn btn--purple" type="submit" disabled={orderStatus === RequestStatus.LOADING || listIdCamerasBasket === '' || listIdCamerasBasket === null} onClick={onSendOrderClick}>
+          <button className="btn btn--purple" type="submit" disabled={orderStatus === RequestStatus.LOADING || listIdCamerasBasket === '' || listIdCamerasBasket === null || statusBasket === RequestStatus.LOADING} onClick={onSendOrderClick}>
             Оформить заказ
           </button>
         </div>

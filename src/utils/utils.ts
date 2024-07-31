@@ -232,12 +232,11 @@ export function clearValueToLocalStorage(key: string): void {
   localStorage.removeItem(key);
 }
 
-export default function calculationDiscount(countCamera: number, price: number, percentCoupon: number) {
+export default function calculationDiscount(countCamera: number, price: number, percentCoupon: number, promoPrice?: number) {
   let discount = percentCoupon;
   let discountPrice = 0;
-  let roundedString = '0';
 
-  if (countCamera === 1) {
+  if (countCamera === 1 && percentCoupon === 0) {
     return 0;
   }
 
@@ -260,19 +259,19 @@ export default function calculationDiscount(countCamera: number, price: number, 
   if (price > OptionDiscountOnPrice.MINIMUM.price && price <= OptionDiscountOnPrice.MEDIUM.price) {
     discount -= OptionDiscountOnPrice.MEDIUM.percent;
   }
-
   if (price > OptionDiscountOnPrice.MEDIUM.price && price <= OptionDiscountOnPrice.HIGH.price) {
     discount -= OptionDiscountOnPrice.HIGH.percent;
   }
-
   if (price > OptionDiscountOnPrice.MAXIMUM.price) {
     discount -= OptionDiscountOnPrice.MAXIMUM.percent;
   }
 
   discountPrice = Number(price * (discount / 100));
-  roundedString = discountPrice.toFixed(2);
+  if (percentCoupon !== 0 && promoPrice) {
+    discountPrice += Number(promoPrice * (percentCoupon / 100));
+  }
 
-  return Number(roundedString);
+  return Number(discountPrice.toFixed(2));
 }
 
 export function createListIdCount(id: number, count: number) {

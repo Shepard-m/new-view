@@ -92,7 +92,6 @@ export default function Pagination() {
 
     setCurrentPage(page);
     setDisplayedPages(originalArray.slice(startIndex, startIndex + visibleSizePaginationPage));
-    // console.log(page, displayedPages)
     updateURLParameter(OptionUrl.PAGE, page.toString(), navigate);
     dispatch(catalogActions.selectPage({page}));
   };

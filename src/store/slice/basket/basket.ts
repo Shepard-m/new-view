@@ -124,9 +124,9 @@ const basketSlice = createSlice({
         }
 
         saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, state.countCameras + state.countPromoCameras);
-        state.discountPrice = calculationDiscount(state.countCameras, copyTotalPrice, state.percentCoupon);
         state.totalPrice = copyTotalPrice + promoCamerasPrice;
         state.priceCamerasWithoutPromo = copyTotalPrice;
+        state.discountPrice = calculationDiscount(state.countCameras, copyTotalPrice, state.percentCoupon, state.totalPrice - state.priceCamerasWithoutPromo);
       }
     },
     changeTotalPrice: (state, action: PayloadAction<{ price: number; sign: string; count: number; id: number }>) => {
@@ -170,9 +170,9 @@ const basketSlice = createSlice({
       saveDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET, state.countCameras + state.countPromoCameras);
 
       roundedString = (copyTotalPrice).toFixed(2);
-      state.discountPrice = calculationDiscount(state.countCameras, copyPriceCamerasWithoutPromo, state.percentCoupon);
       state.totalPrice = Number(roundedString);
       state.priceCamerasWithoutPromo = copyPriceCamerasWithoutPromo;
+      state.discountPrice = calculationDiscount(state.countCameras, copyPriceCamerasWithoutPromo, state.percentCoupon, state.totalPrice - state.priceCamerasWithoutPromo);
     },
     saveCameraBasket: (state, action: PayloadAction<{ listId: string }>) => {
       state.listIdCamerasBasket = action.payload.listId;
@@ -189,16 +189,20 @@ const basketSlice = createSlice({
         state.countPromoCameras -= action.payload.count;
         const copySelectedPromoCameras = state.selectedPromoCameras.filter((camera) => camera.id !== action.payload.id);
         state.selectedPromoCameras = copySelectedPromoCameras.length === 0 ? null : copySelectedPromoCameras;
+        state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon, state.totalPrice - state.priceCamerasWithoutPromo);
         return;
       }
 
       state.countCameras -= action.payload.count;
       state.priceCamerasWithoutPromo -= action.payload.price;
       state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon);
+      if (state.percentCoupon !== 0) {
+        state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon, state.totalPrice - state.priceCamerasWithoutPromo);
+      }
     },
     applicationCoupon: (state, action: PayloadAction<{ percent: number }>) => {
       state.percentCoupon = action.payload.percent;
-      state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon);
+      state.discountPrice = calculationDiscount(state.countCameras, state.priceCamerasWithoutPromo, state.percentCoupon, state.totalPrice - state.priceCamerasWithoutPromo);
     },
     clearBasket: (state) => {
       state.statusBasket = RequestStatus.NONE;

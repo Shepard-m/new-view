@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import ButtonPromo from './button-promo';
 
 describe('Button-promo', () => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function mockHandler() {
   }
   it('should return component ButtonPromo', () => {

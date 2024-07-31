@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { orderStatusSelectors } from '../../store/slice/order/ordersSelectors';
 import { clearValueToLocalStorage, createListIdCount, getDataLocalStorage, removeIdCount, removeValueToLocalStorage, saveDataLocalStorage } from '../../utils/utils';
 import { TIdCount } from '../../types/id-count';
+import { statusBasketSelectors } from '../../store/slice/basket/basket-selectors';
 
 type TBasketItem = {
   camera: TProduct;
@@ -17,6 +18,7 @@ export default function BasketItem({ camera }: TBasketItem) {
   const selector = useAppSelector;
   const navigate = useNavigate();
   const orderStatus = selector(orderStatusSelectors);
+  const statusBasket = selector(statusBasketSelectors);
   const [countCamera, setCountCamera] = useState<number>(1);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [totalPrice, setTotalPrice] = useState<number>(camera.price);
@@ -141,14 +143,14 @@ export default function BasketItem({ camera }: TBasketItem) {
           {camera.price} ₽
         </p>
         <div className="quantity">
-          <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onBackCountCamera} disabled={orderStatus === RequestStatus.LOADING}>
+          <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onBackCountCamera} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}>
             <svg width={7} height={12} aria-hidden="true">
               <use xlinkHref="#icon-arrow" />
             </svg>
           </button>
           <label className="visually-hidden" htmlFor="counter1" />
-          <input type="number" id="counter1" value={countCamera} min={1} max={9} aria-label="количество товара" onChange={onInputCountCamerasChange} disabled={orderStatus === RequestStatus.LOADING}/>
-          <button className="btn-icon btn-icon--next" aria-label="увеличить количество товара" onClick={onNextCountCamera} disabled={orderStatus === RequestStatus.LOADING}>
+          <input type="number" id="counter1" value={countCamera} min={1} max={9} aria-label="количество товара" onChange={onInputCountCamerasChange} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}/>
+          <button className="btn-icon btn-icon--next" aria-label="увеличить количество товара" onClick={onNextCountCamera} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}>
             <svg width={7} height={12} aria-hidden="true">
               <use xlinkHref="#icon-arrow" />
             </svg>
@@ -160,7 +162,7 @@ export default function BasketItem({ camera }: TBasketItem) {
           </span>
           {totalPrice} ₽
         </div>
-        <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onOpenModalClick} disabled={orderStatus === RequestStatus.LOADING}>
+        <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onOpenModalClick} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}>
           <svg width={10} height={10} aria-hidden="true">
             <use xlinkHref="#icon-close" />
           </svg>
