@@ -10,7 +10,12 @@ type ButtonCard = {
 }
 
 export function ButtonCard({listCardInBasket, camera, typeButton, onOpenModalBuyClick}:ButtonCard) {
-  if (listCardInBasket?.includes(camera.id.toString()) && typeButton !== TypeButton.CAMERA_PAGE) {
+  let listIdNumber: number[] = [];
+  if (listCardInBasket) {
+    listIdNumber = listCardInBasket.split(',').map(Number);
+  }
+
+  if (listIdNumber.includes(camera.id) && typeButton !== TypeButton.CAMERA_PAGE) {
     return (
       <Link className="btn btn--purple-border product-card__btn product-card__btn--in-cart" data-testid={'button-card'} to={AppRoute.BASKET}>
         <svg width={16} height={16} aria-hidden="true">
