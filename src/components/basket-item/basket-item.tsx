@@ -41,7 +41,7 @@ export default function BasketItem({ camera }: TBasketItem) {
     }
   }, []);
 
-  function removeCamera() {
+  function onRemoveCameraClick() {
     const countBasketCamera = getDataLocalStorage(KeyLocalStorage.COUNT_CAMERAS_BASKET);
     removeValueToLocalStorage(KeyLocalStorage.BASKET, camera.id);
     dispatch(basketActions.removeCameraBasket({ id: camera.id, count: countCamera, price: totalPrice}));
@@ -104,7 +104,7 @@ export default function BasketItem({ camera }: TBasketItem) {
     setIsModal(false);
   }
 
-  function onBackCountCamera() {
+  function onBackCountCameraClick() {
     if (countCamera > 1) {
       createListIdCount(camera.id, countCamera - 1);
       dispatch(basketActions.changeTotalPrice({price: camera.price, sign: ArithmeticSigns.SUBTRACTION, count: 1, id: camera.id}));
@@ -143,7 +143,7 @@ export default function BasketItem({ camera }: TBasketItem) {
           {camera.price} ₽
         </p>
         <div className="quantity">
-          <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onBackCountCamera} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}>
+          <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onBackCountCameraClick} disabled={orderStatus === RequestStatus.LOADING || statusBasket === RequestStatus.LOADING}>
             <svg width={7} height={12} aria-hidden="true">
               <use xlinkHref="#icon-arrow" />
             </svg>
@@ -198,7 +198,7 @@ export default function BasketItem({ camera }: TBasketItem) {
               </div>
             </div>
             <div className="modal__buttons">
-              <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={removeCamera}>
+              <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={onRemoveCameraClick}>
                 Удалить
               </button>
               <Link className="btn btn--transparent modal__btn modal__btn--half-width" to={AppRoute.CATALOG}>

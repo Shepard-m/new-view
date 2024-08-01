@@ -31,7 +31,7 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
     }
   };
 
-  const handleTabKey = (evt: KeyboardEvent) => {
+  const onTabKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Tab' && modalContentRef.current) {
       const focusableElements = modalContentRef.current.querySelectorAll<HTMLElement>(
         'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
@@ -66,11 +66,11 @@ export default function ButtonAddBasket({ camera, typeButtons: typeButton }: TPr
     if (isActiveModal && bodyContainer !== null) {
       bodyContainer.classList.add(scrollLock);
       document.addEventListener('click', onCloseModalClick);
-      document.addEventListener('keydown', handleTabKey);
+      document.addEventListener('keydown', onTabKeyDown);
     } else {
       bodyContainer?.classList.remove(scrollLock);
       document.removeEventListener('click', onCloseModalClick);
-      document.removeEventListener('keydown', handleTabKey);
+      document.removeEventListener('keydown', onTabKeyDown);
     }
     clearErrors();
   }, [isActiveModal]);

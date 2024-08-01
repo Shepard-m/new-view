@@ -33,7 +33,7 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
     rating: 0,
   });
 
-  const handleTabKey = (evt: KeyboardEvent) => {
+  const onHandleTabKeyDown = (evt: KeyboardEvent) => {
     if (evt.key === 'Tab' && modalContentRef.current) {
       const focusableElements = modalContentRef.current.querySelectorAll<HTMLElement>(
         'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
@@ -65,11 +65,11 @@ export function ButtonAddReview({ cameraId }: TButtonAddReview) {
     if (isModal) {
       body?.classList.add(scrollLock);
       document.addEventListener('keydown', onCloseModalKeyDown);
-      document.addEventListener('keydown', handleTabKey);
+      document.addEventListener('keydown', onHandleTabKeyDown);
     } else {
       body?.classList.remove(scrollLock);
       document.removeEventListener('keydown', onCloseModalKeyDown);
-      document.removeEventListener('keydown', handleTabKey);
+      document.removeEventListener('keydown', onHandleTabKeyDown);
     }
   }, [isModal]);
 
