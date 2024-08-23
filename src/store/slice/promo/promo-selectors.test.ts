@@ -1,90 +1,26 @@
-import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
-import { mockPromos } from '../../../utils/moсks';
-import { basketSlice } from '../basket/basket';
-import { cameraSlice } from '../camera/camera';
-import { catalogSlice } from '../catalog/catalog';
-import { orderSlice } from '../order/order';
-import { reviewsSlice } from '../reviews/reviews';
-import { similarSlice } from '../similar/similar';
+import { mockInitialState } from '../../../utils/mocks-component';
 import { promosSlice } from './promo';
 import { promosSelectors, promosStatusSelectors, selectedPromoSelectors } from './promo-selectors';
 
 describe('Promo selectors', () => {
-  const initialState = {
-    [promosSlice.name]: {
-      promos: mockPromos,
-      selectedPromo: mockPromos[0],
-      promosStatus: RequestStatus.NONE,
-    },
-    [reviewsSlice.name]: {
-      reviews: null,
-      reviewsStatus: RequestStatus.NONE,
-    },
-    [cameraSlice.name]: {
-      cameraStatus: RequestStatus.NONE,
-      camera: null,
-    },
-    [similarSlice.name]: {
-      similarStatus: RequestStatus.NONE,
-      similar: null,
-    },
-    [orderSlice.name]: {
-      orderStatus: RequestStatus.NONE,
-    },
-    [catalogSlice.name]: {
-      statusCameras: RequestStatus.NONE,
-      cameras: null,
-      filterCameras: null,
-      filterSettings: {
-        price: {
-          from: 0,
-          to: 0
-        },
-        category: null,
-        type: null,
-        level: null,
-        disabledType: null,
-        placeholderPrice: {
-          from: 0,
-          to: 0,
-        },
-      },
-      currentPage: 1,
-      sliceCamerasByPage: null,
-      directionSorting: DirectionSorting.TOP.direction,
-      typeSorting: SettingSort.price.type,
-    },
-    [basketSlice.name]: {
-      statusBasket: RequestStatus.NONE,
-      listIdCamerasBasket: null,
-      discountPrice: 0,
-      totalPrice: 0,
-      priceCamerasWithoutPromo: 0,
-      countCameras: 0,
-      percentCoupon: 0,
-      countPromoCameras: 0,
-      promoProduct: null,
-      selectedPromoCameras: null,
-    }
-  };
   it('should return promos', () => {
-    const { promos } = initialState[promosSlice.name];
+    const { promos } = mockInitialState[promosSlice.name];
 
-    const result = promosSelectors(initialState);
+    const result = promosSelectors(mockInitialState);
 
     expect(result).toEqual(promos);
   });
   it('should return selectedPromo', () => {
-    const { selectedPromo } = initialState[promosSlice.name];
+    const { selectedPromo } = mockInitialState[promosSlice.name];
 
-    const result = selectedPromoSelectors(initialState);
+    const result = selectedPromoSelectors(mockInitialState);
 
     expect(result).toEqual(selectedPromo);
   });
   it('should return promosStatus', () => {
-    const { promosStatus } = initialState[promosSlice.name];
+    const { promosStatus } = mockInitialState[promosSlice.name];
 
-    const result = promosStatusSelectors(initialState);
+    const result = promosStatusSelectors(mockInitialState);
 
     expect(result).toEqual(promosStatus);
   });

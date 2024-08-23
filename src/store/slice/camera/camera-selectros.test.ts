@@ -1,83 +1,19 @@
-import { DirectionSorting, RequestStatus, SettingSort } from '../../../const';
-import { mockPromos } from '../../../utils/moсks';
-import { cameraSlice } from '../camera/camera';
-import { catalogSlice } from '../catalog/catalog';
-import { orderSlice } from '../order/order';
-import { reviewsSlice } from '../reviews/reviews';
-import { similarSlice } from '../similar/similar';
-import { promosSlice } from '../promo/promo';
+import { mockInitialState } from '../../../utils/mocks-component';
+import { cameraSlice } from './camera';
 import { cameraStatusSelectors, cameraSelectors } from './cameraSelectors';
-import { basketSlice } from '../basket/basket';
 
 describe('Order selectors', () => {
-  const initialState = {
-    [promosSlice.name]: {
-      promos: mockPromos,
-      selectedPromo: mockPromos[0],
-      promosStatus: RequestStatus.NONE,
-    },
-    [reviewsSlice.name]: {
-      reviews: null,
-      reviewsStatus: RequestStatus.NONE,
-    },
-    [cameraSlice.name]: {
-      cameraStatus: RequestStatus.NONE,
-      camera: null,
-    },
-    [similarSlice.name]: {
-      similarStatus: RequestStatus.NONE,
-      similar: null,
-    },
-    [orderSlice.name]: {
-      orderStatus: RequestStatus.NONE,
-    },
-    [catalogSlice.name]: {
-      statusCameras: RequestStatus.NONE,
-      cameras: null,
-      filterCameras: null,
-      filterSettings: {
-        price: {
-          from: 0,
-          to: 0
-        },
-        category: null,
-        type: null,
-        level: null,
-        disabledType: null,
-        placeholderPrice: {
-          from: 0,
-          to: 0,
-        },
-      },
-      currentPage: 1,
-      sliceCamerasByPage: null,
-      directionSorting: DirectionSorting.TOP.direction,
-      typeSorting: SettingSort.price.type,
-    },
-    [basketSlice.name]: {
-      statusBasket: RequestStatus.NONE,
-      listIdCamerasBasket: null,
-      discountPrice: 0,
-      totalPrice: 0,
-      priceCamerasWithoutPromo: 0,
-      countCameras: 0,
-      percentCoupon: 0,
-      countPromoCameras: 0,
-      promoProduct: null,
-      selectedPromoCameras: null,
-    }
-  };
   it('should return camera', () => {
-    const { camera } = initialState[cameraSlice.name];
+    const { camera } = mockInitialState[cameraSlice.name];
 
-    const result = cameraSelectors(initialState);
+    const result = cameraSelectors(mockInitialState);
 
     expect(result).toEqual(camera);
   });
   it('should return cameraStatus', () => {
-    const { cameraStatus } = initialState[cameraSlice.name];
+    const { cameraStatus } = mockInitialState[cameraSlice.name];
 
-    const result = cameraStatusSelectors(initialState);
+    const result = cameraStatusSelectors(mockInitialState);
 
     expect(result).toEqual(cameraStatus);
   });
