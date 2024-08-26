@@ -10,7 +10,7 @@ export default function App() {
     <Routes>
       <Route path={AppRoute.CATALOG}>
         <Route
-          index
+          path={'/nev-view'}
           element={<CatalogPage />}
         />
         <Route
