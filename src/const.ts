@@ -7,7 +7,7 @@ export const countCamerasForPage = 9;
 export const visibleSizePaginationPage = 3;
 
 export const AppRoute = {
-  CATALOG: '/',
+  CATALOG: 'new-view/',
   CAMERA: '/camera',
   NOT_FOUND: '*',
   BASKET: '/card',
