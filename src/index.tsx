@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <HelmetProvider>
-      <BrowserRouter basename='/new-view/'>
+      <BrowserRouter>
         <Provider store={store}>
           <ToastContainer />
           <App />
