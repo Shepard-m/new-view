@@ -145,12 +145,25 @@ export function selectCamerasByPage(cameras: TProduct[] | null, page: number) {
   return sliceCameras;
 }
 
-export function updateURLParameter(param: string, value: string, navigate: NavigateFunction) {
+export function updateURLParameter(param: string, value: string, navigate: NavigateFunction, basename = '/new-view/') {
   const url = new URL(window.location.href);
-  url.searchParams.set(param, value);
-  navigate(`${url.pathname}${url.search}`);
-}
 
+  const currentValue = url.searchParams.get(param);
+
+  if (currentValue === value) {
+    return;
+  }
+
+  let pathname = url.pathname;
+
+  if (pathname.startsWith(basename)) {
+    pathname = pathname.replace(basename, '/');
+  }
+
+  url.searchParams.set(param, value);
+
+  navigate(`${pathname}${url.search}`);
+}
 export function getURLParameter(param: string): string | null {
   const url = new URL(window.location.href);
   return url.searchParams.get(param);
@@ -162,24 +175,38 @@ export function getURLParameterMulti(param: string): string[] {
   return paramValue ? paramValue.split(',') : [];
 }
 
-export function updateURLParameterMulti(param: string, values: string[], navigate: NavigateFunction) {
+
+export function updateURLParameterMulti(param: string, values: string[], navigate: NavigateFunction, basename = '/new-view/') {
   const url = new URL(window.location.href);
-  if (values.length > 0) {
-    url.searchParams.set(param, values.join(','));
-  } else {
-    url.searchParams.delete(param);
+
+  const currentValue = url.searchParams.get(param);
+  if (currentValue === values.join(',')) {
+    return;
   }
 
-  navigate(`${url.pathname}${url.search}`);
+  let pathname = url.pathname;
+  if (pathname.startsWith(basename)) {
+    pathname = pathname.replace(basename, '/');
+  }
+
+  url.searchParams.delete(param);
+  values.forEach((value) => url.searchParams.append(param, value));
+
+  navigate(`${pathname}${url.search}`);
 }
 
-export function deleteURLParameter(param: string, navigate: NavigateFunction) {
+
+export function deleteURLParameter(param: string, navigate: NavigateFunction, basename = '/new-view/') {
   const url = new URL(window.location.href);
-  if (url.searchParams.has(param)) {
-    url.searchParams.delete(param);
+
+  let pathname = url.pathname;
+  if (pathname.startsWith(basename)) {
+    pathname = pathname.replace(basename, '/');
   }
 
-  navigate(`${url.pathname}${url.search}`);
+  url.searchParams.delete(param);
+
+  navigate(`${pathname}${url.search}`);
 }
 
 export function saveDataLocalStorage(key: string, data: string | number | TIdCount): void {

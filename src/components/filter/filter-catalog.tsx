@@ -37,7 +37,7 @@ export function FilterCatalog() {
     }
     const totalPages = Math.ceil(filterCameras?.length / countCamerasForPage);
     if (totalPages === 1) {
-      updateURLParameter(OptionUrl.PAGE, '1', navigate);
+      // updateURLParameter(OptionUrl.PAGE, '1', navigate);
     }
   }, [filterCameras]);
 
@@ -226,7 +226,7 @@ export function FilterCatalog() {
             <div key={category.value} className="custom-radio catalog-filter__item">
               <label>
                 <input type="radio" name="category" checked={category.data === filterSettings.category} onChange={onSelectCategoryClick}/>
-                <span data-id={category.data} className="custom-radio__icon" onClick={onSelectCategoryClick} />
+                <span data-id={category.data} className="custom-radio__icon"/>
                 <span data-id={category.data} className="custom-radio__label" onClick={onSelectCategoryClick}>{category.value}</span>
               </label>
             </div>

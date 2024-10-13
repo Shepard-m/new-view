@@ -3,7 +3,7 @@ import './not-found-page-style.css';
 import { AppRoute } from '../../const';
 export default function NotFoundPage() {
   return (
-    <div className="container-not-page" data-testId={'not-found-page'}>
+    <div className="container-not-page" data-testid={'not-found-page'}>
       <h1 className="first-four">4</h1>
       <div className="cog-wheel1">
         <div className="cog1">
