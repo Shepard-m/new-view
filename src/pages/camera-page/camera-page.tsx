@@ -65,8 +65,8 @@ export default function CameraPage() {
               <div className="container">
                 <div className="product__img">
                   <picture>
-                    <source type="image/webp" srcSet={`/${camera.previewImgWebp}, /${camera.previewImgWebp2x} 2x`} />
-                    <img src={`/${camera.previewImg}`} srcSet={`/${camera.previewImg2x} 2x`} width={280} height={240} alt={camera.name} />
+                    <source type="image/webp" srcSet={`${camera.previewImgWebp}, ${camera.previewImgWebp2x} 2x`} />
+                    <img src={`${camera.previewImg}`} srcSet={`${camera.previewImg2x} 2x`} width={280} height={240} alt={camera.name} />
                   </picture>
                 </div>
                 <div className="product__content">
